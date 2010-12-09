@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqldiff PUBLIC "-//OpenMRS//DTD OpenMRS SQL Diff Config 1.0//EN" "http://resources.openmrs.org/doctype/sqldiff-1.0.dtd">
+
+<sqldiff version="1.0">
+	<help>
+		USE:
+			The diffs are ordered by datamodel version number.
+			The script can be run in a top down fashion and is
+			expected to not fail or overwrite old data
+		
+		EXPECT:
+			- "use business-database-name;" was called prior to
+			   calling this script
+	</help>
+	
+	<diff>
+		<version>1.0.0</version>
+		<author>Tammy Dugan</author>
+		<date>Nov 11 2009</date>
+		<description>
+			Initial database setup.
+		</description>
+		<sql>
+		
+	
+CREATE TABLE `chirdlutil_location_attribute` (
+  `location_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`location_attribute_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `chirdlutil_location_attribute_value` (
+  `location_attribute_value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `location_attribute_id` int(11) NOT NULL,
+  PRIMARY KEY (`location_attribute_value_id`),
+  KEY `chirdlutil_location_value_fk_attr` (`location_attribute_id`),
+  KEY `chirdlutil_loc_att_fk_loc` (`location_id`),
+  CONSTRAINT `chirdlutil_loc_att_fk_loc` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`),
+  CONSTRAINT `chirdlutil_location_value_fk_attr` FOREIGN KEY (`location_attribute_id`) REFERENCES `chirdlutil_location_attribute`
+(`location_attribute_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `chirdlutil_location_tag_attribute` (
+  `location_tag_attribute_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`location_tag_attribute_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `chirdlutil_location_tag_attribute_value` (
+  `location_tag_attribute_value_id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_tag_id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `location_tag_attribute_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`location_tag_attribute_value_id`),
+  KEY `chirdlutil_location_tag_value_fk_location_tag` (`location_tag_id`),
+  KEY `chirdlutil_location_tag_value_fk_attr` (`location_tag_attribute_id`),
+  KEY `chirdlutil_loc_tag_att_fk_loc` (`location_id`),
+  CONSTRAINT `chirdlutil_loc_tag_att_fk_loc` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`),
+  CONSTRAINT `chirdlutil_location_tag_value_fk_attr` FOREIGN KEY (`location_tag_attribute_id`) REFERENCES 
+`chirdlutil_location_tag_attribute` (`location_tag_attribute_id`),
+  CONSTRAINT `chirdlutil_location_tag_value_fk_location_tag` FOREIGN KEY (`location_tag_id`) REFERENCES `location_tag` 
+(`location_tag_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+		</sql>
+	</diff>
+	
+	<diff>
+		<version>1.0.1</version>
+		<author>Jun Wang</author>
+		<date>Jan 13 2010</date>
+		<description>
+				Insert a task schedule (to run once a week) for archiving log files.
+		</description>
+		<sql>
+				INSERT INTO 
+						scheduler_task_config 
+ 								(`name`, `schedulable_class`, `start_time`, `start_time_pattern`, `repeat_interval`, `start_on_startup`, `started`, `created_by`, `date_created`)
+				SELECT 
+								'Cron job archiving Tomcat log files','org.openmrs.module.chirdlutil.LogArchiveCron', NOW(), 'MM/dd/yyyy HH:mm:ss', 604800, 1, 0, 1, NOW() 
+				FROM 
+							(select count(*) as cnt from scheduler_task_config where name='Cron job archiving Tomcat log files')  a
+				WHERE	a.cnt=0;
+		</sql>
+	</diff>
+</sqldiff>

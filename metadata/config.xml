@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.0.dtd">
+
+<module configVersion="1.0">
+	
+	<!-- chirdlutil Module Properties -->
+	<id>chirdlutil</id>
+	<name>chirdlutil</name>
+	<version>1.0.14</version>
+	<package>org.openmrs.module.@MODULE_ID@</package>
+	<author>Tammy Dugan</author>
+	<description>
+			Contains utility methods and tables for
+			CHIRDL (Child Health Improvement Research and Development Lab)
+	</description>
+
+	<activator>@MODULE_PACKAGE@.ChirdlUtilActivator</activator>
+	
+	<!-- /chirdlutil Module Properties -->
+	
+	<require_version>1.1.10.2283</require_version>
+	
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>org.openmrs.module.chirdlutil.extension.html.AdminList</class>
+	</extension>
+	
+	<globalProperty>
+		<property>chirdlutil.archiveDirectory</property>
+   		<description>Directory of the archivefiles.</description>
+	</globalProperty>
+	
+	<!-- Internationalization -->
+	<!-- All message codes should start with @MODULE_ID@.* -->
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<!-- /Internationalization -->
+	
+	<mappingFiles>
+		location_tag_attribute.hbm.xml
+		location_tag_attribute_value.hbm.xml
+		location_attribute.hbm.xml
+		location_attribute_value.hbm.xml
+	</mappingFiles>
+	
+</module>
+
