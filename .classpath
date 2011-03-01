@@ -61,6 +61,5 @@
 	<classpathentry kind="lib" path="lib/jibx-bind.jar"/>
 	<classpathentry kind="lib" path="lib/jibx-extras.jar"/>
 	<classpathentry kind="lib" path="lib/jibx-run.jar"/>
-	<classpathentry kind="lib" path="dist"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

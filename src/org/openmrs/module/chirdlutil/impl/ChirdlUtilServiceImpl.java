@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationAttributeValue;
+import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttribute;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttributeValue;
 import org.openmrs.module.chirdlutil.service.ChirdlUtilService;
 
@@ -52,4 +53,39 @@ public class ChirdlUtilServiceImpl implements ChirdlUtilService {
 	public LocationTagAttributeValue getLocationTagAttributeValueById(Integer location_tag_attribute_value_id) {
 		return getChirdlUtilDAO().getLocationTagAttributeValueById( location_tag_attribute_value_id);
 	}
+	
+	@Override
+	public LocationTagAttribute getLocationTagAttribute(Integer locationTagAttributeId) {
+		return getChirdlUtilDAO().getLocationTagAttribute(locationTagAttributeId);
+	}
+	
+	@Override
+	public LocationTagAttribute getLocationTagAttribute(String locationTagAttributeName) {
+		return getChirdlUtilDAO().getLocationTagAttribute(locationTagAttributeName);
+	}
+	
+	@Override
+	public LocationTagAttribute saveLocationTagAttribute(LocationTagAttribute value) {
+		return getChirdlUtilDAO().saveLocationTagAttribute(value);
+	}
+
+	@Override
+    public LocationTagAttributeValue saveLocationTagAttributeValue(LocationTagAttributeValue value) {
+	    return getChirdlUtilDAO().saveLocationTagAttributeValue(value);
+    }
+
+	@Override
+    public LocationAttributeValue saveLocationAttributeValue(LocationAttributeValue value) {
+	    return getChirdlUtilDAO().saveLocationAttributeValue(value);
+    }
+
+	@Override
+    public void deleteLocationTagAttribute(LocationTagAttribute value) {
+	    getChirdlUtilDAO().deleteLocationTagAttribute(value);
+    }
+
+	@Override
+    public void deleteLocationTagAttributeValue(LocationTagAttributeValue value) {
+	    getChirdlUtilDAO().deleteLocationTagAttributeValue(value);
+    }
 }

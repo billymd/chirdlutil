@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Expression;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationAttribute;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationAttributeValue;
@@ -156,6 +158,68 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		}
 		return null;
 	}
+	
+	@Override
+    public LocationTagAttribute getLocationTagAttribute(Integer locationTagAttributeId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttribute.class).add(
+		    Expression.eq("locationTagAttributeId", locationTagAttributeId));
+		
+		List<LocationTagAttribute> locations = criteria.list();
+		if (null == locations || locations.isEmpty()) {
+			return null;
+		}
+		return locations.get(0);
+    }
+
+	@Override
+    public LocationTagAttribute getLocationTagAttribute(String locationTagAttributeName) {		
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttribute.class).add(
+		    Expression.eq("name", locationTagAttributeName));
+		
+		List<LocationTagAttribute> locations = criteria.list();
+		if (null == locations || locations.isEmpty()) {
+			return null;
+		}
+		return locations.get(0);
+    }
+	
+	@Override
+	public LocationTagAttribute saveLocationTagAttribute(LocationTagAttribute value) {
+		sessionFactory.getCurrentSession().saveOrUpdate(value);
+		return value;
+	}
+
+	@Override
+    public LocationTagAttributeValue saveLocationTagAttributeValue(LocationTagAttributeValue value) {
+		sessionFactory.getCurrentSession().saveOrUpdate(value);
+		return value;
+    }
+
+	@Override
+    public LocationAttributeValue saveLocationAttributeValue(LocationAttributeValue value) {
+		sessionFactory.getCurrentSession().saveOrUpdate(value);
+		return value;
+    }
+
+	@Override
+    public void deleteLocationTagAttribute(LocationTagAttribute value) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttributeValue.class).add(
+		    Expression.eq("locationTagAttributeId", value.getLocationTagAttributeId()));
+		
+		List<LocationTagAttributeValue> locations = criteria.list();
+		if (null != locations) {
+			for (LocationTagAttributeValue attr : locations) {
+				deleteLocationTagAttributeValue(attr);
+			}
+		}
+		
+		sessionFactory.getCurrentSession().delete(value);
+    }
+
+	@Override
+    public void deleteLocationTagAttributeValue(LocationTagAttributeValue value) {
+		sessionFactory.getCurrentSession().delete(value);
+    }
 	
 }
 
