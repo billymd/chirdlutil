@@ -54,37 +54,30 @@ public class ChirdlUtilServiceImpl implements ChirdlUtilService {
 		return getChirdlUtilDAO().getLocationTagAttributeValueById( location_tag_attribute_value_id);
 	}
 	
-	@Override
 	public LocationTagAttribute getLocationTagAttribute(Integer locationTagAttributeId) {
 		return getChirdlUtilDAO().getLocationTagAttribute(locationTagAttributeId);
 	}
 	
-	@Override
 	public LocationTagAttribute getLocationTagAttribute(String locationTagAttributeName) {
 		return getChirdlUtilDAO().getLocationTagAttribute(locationTagAttributeName);
 	}
 	
-	@Override
 	public LocationTagAttribute saveLocationTagAttribute(LocationTagAttribute value) {
 		return getChirdlUtilDAO().saveLocationTagAttribute(value);
 	}
 
-	@Override
     public LocationTagAttributeValue saveLocationTagAttributeValue(LocationTagAttributeValue value) {
 	    return getChirdlUtilDAO().saveLocationTagAttributeValue(value);
     }
 
-	@Override
     public LocationAttributeValue saveLocationAttributeValue(LocationAttributeValue value) {
 	    return getChirdlUtilDAO().saveLocationAttributeValue(value);
     }
 
-	@Override
     public void deleteLocationTagAttribute(LocationTagAttribute value) {
 	    getChirdlUtilDAO().deleteLocationTagAttribute(value);
     }
 
-	@Override
     public void deleteLocationTagAttributeValue(LocationTagAttributeValue value) {
 	    getChirdlUtilDAO().deleteLocationTagAttributeValue(value);
     }

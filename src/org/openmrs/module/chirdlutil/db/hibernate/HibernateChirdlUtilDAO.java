@@ -158,8 +158,7 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		}
 		return null;
 	}
-	
-	@Override
+
     public LocationTagAttribute getLocationTagAttribute(Integer locationTagAttributeId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttribute.class).add(
 		    Expression.eq("locationTagAttributeId", locationTagAttributeId));
@@ -171,7 +170,6 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		return locations.get(0);
     }
 
-	@Override
     public LocationTagAttribute getLocationTagAttribute(String locationTagAttributeName) {		
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttribute.class).add(
 		    Expression.eq("name", locationTagAttributeName));
@@ -182,27 +180,23 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		}
 		return locations.get(0);
     }
-	
-	@Override
+
 	public LocationTagAttribute saveLocationTagAttribute(LocationTagAttribute value) {
 		sessionFactory.getCurrentSession().saveOrUpdate(value);
 		return value;
 	}
-
-	@Override
+	
     public LocationTagAttributeValue saveLocationTagAttributeValue(LocationTagAttributeValue value) {
 		sessionFactory.getCurrentSession().saveOrUpdate(value);
 		return value;
     }
 
-	@Override
     public LocationAttributeValue saveLocationAttributeValue(LocationAttributeValue value) {
 		sessionFactory.getCurrentSession().saveOrUpdate(value);
 		return value;
     }
 
-	@Override
-    public void deleteLocationTagAttribute(LocationTagAttribute value) {
+	public void deleteLocationTagAttribute(LocationTagAttribute value) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocationTagAttributeValue.class).add(
 		    Expression.eq("locationTagAttributeId", value.getLocationTagAttributeId()));
 		
@@ -216,7 +210,6 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		sessionFactory.getCurrentSession().delete(value);
     }
 
-	@Override
     public void deleteLocationTagAttributeValue(LocationTagAttributeValue value) {
 		sessionFactory.getCurrentSession().delete(value);
     }
