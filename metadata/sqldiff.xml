@@ -87,4 +87,25 @@ CREATE TABLE `chirdlutil_location_tag_attribute_value` (
 				WHERE	a.cnt=0;
 		</sql>
 	</diff>
+	<diff>
+        <version>1.0.2</version>
+        <author>Steve McKee</author>
+        <date>March 28 2011</date>
+        <description>
+                Create new event_log table for audit trail handling.
+        </description>
+        <sql>
+                create table if not exists chirdlutil_event_log (
+				  event_id int(11) NOT NULL auto_increment,
+				  location_id int(11) NULL, 
+				  form_id int(11) NULL, 
+				  study_id int (11) NULL,
+				  user_id int(11) NOT NULL,
+				  event varchar(255) NOT NULL, 
+				  event_time datetime NOT NULL,  
+				  description varchar(255) default NULL, 
+				  PRIMARY KEY (event_id)
+				  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </diff>
 </sqldiff>

@@ -6,7 +6,7 @@
 	<!-- chirdlutil Module Properties -->
 	<id>chirdlutil</id>
 	<name>chirdlutil</name>
-	<version>1.0.16</version>
+	<version>1.0.17</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Tammy Dugan</author>
 	<description>
@@ -43,6 +43,7 @@
 		location_tag_attribute_value.hbm.xml
 		location_attribute.hbm.xml
 		location_attribute_value.hbm.xml
+		event_log.hbm.xml
 	</mappingFiles>
 	
 </module>

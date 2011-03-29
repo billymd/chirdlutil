@@ -1,8 +1,12 @@
 package org.openmrs.module.chirdlutil.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
+import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationAttributeValue;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttribute;
 import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttributeValue;
@@ -80,5 +84,15 @@ public class ChirdlUtilServiceImpl implements ChirdlUtilService {
 
     public void deleteLocationTagAttributeValue(LocationTagAttributeValue value) {
 	    getChirdlUtilDAO().deleteLocationTagAttributeValue(value);
+    }
+
+    public EventLog logEvent(EventLog eventLog) {
+	    return getChirdlUtilDAO().logEvent(eventLog);
+    }
+
+    public List<EventLog> getEventLogs(Integer eventId, Integer locationId, Integer formId, Integer studyId, String event,
+                                       Date startDate, Date endDate, Integer userId, String description) {
+	    return getChirdlUtilDAO().getEventLogs(eventId, locationId, formId, studyId, event, startDate, 
+	    	endDate, userId, description);
     }
 }

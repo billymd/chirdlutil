@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.chirdlutil">
+
+    <class name="org.openmrs.module.chirdlutil.hibernateBeans.EventLog" table="chirdlutil_event_log">
+        
+        <id name="eventId" type="java.lang.Integer" column="event_id">
+            <generator class="native" />
+        </id>
+    
+        <property name="locationId" type="java.lang.Integer" column="location_id" />
+        <property name="formId" type="java.lang.Integer" column="form_id" />
+        <property name="studyId" type="java.lang.Integer" column="study_id" />
+        <property name="event" type="java.lang.String" column="event" />
+        <property name="eventTime" type="java.util.Date" column="event_time"/>
+        <property name="userId" type="java.lang.Integer" column="user_id" />
+        <property name="description" type="java.lang.String" column="description" />
+    </class>
+    
+</hibernate-mapping>
