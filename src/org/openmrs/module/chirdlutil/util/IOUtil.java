@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -491,6 +492,33 @@ public class IOUtil
 			log.error("", e);
 		}
 		
+	}
+	
+	/**
+	 * Finds an image file based on location id, form id, and form instance id 
+	 * in the provided directory.
+	 * 
+	 * @param imageFilename String containing the location id + form id + form instance id.
+	 * @param imageDir The directory to search for the file.
+	 * 
+	 * @return File matching the search criteria.
+	 */
+	public static File searchForImageFile(String imageFilename, String imageDir) {
+		//This FilenameFilter will get ALL tifs starting with the filename
+		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
+		FilenameFilter filtered = new FileListFilter(imageFilename, "tif");
+		File dir = new File(imageDir);
+		File[] files = dir.listFiles(filtered);
+		if (!(files == null || files.length == 0)) {
+			//This FileDateComparator will list in order
+			//with newest file first.
+			Arrays.sort(files, new FileDateComparator());
+			imageFilename = files[0].getPath();
+		}
+		
+		File imagefile = new File(imageFilename);
+		
+		return imagefile;
 	}
 
 }
