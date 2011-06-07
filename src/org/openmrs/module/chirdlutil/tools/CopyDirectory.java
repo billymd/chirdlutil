@@ -93,7 +93,6 @@ public class CopyDirectory {
     private void setCopyBrowseAction(JButton copyBrowseButton, final JFrame frame) {
     	copyBrowseButton.addActionListener(new ActionListener() {
 
-			@Override
             public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(copyDirField.getText());
 	            fileChooser.setDialogTitle("Choose Directory to Copy");
@@ -111,7 +110,6 @@ public class CopyDirectory {
     private void setTargetBrowseAction(JButton targetBrowseButton, final JFrame frame) {
     	targetBrowseButton.addActionListener(new ActionListener() {
 
-			@Override
             public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(targDirField.getText());
 	            fileChooser.setDialogTitle("Choose Target Directory");
@@ -129,8 +127,7 @@ public class CopyDirectory {
     private void setGoAction(JButton goButton, final JFrame frame) {
     	goButton.addActionListener(new ActionListener() {
 
-			@Override
-            public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				String dirToCopyStr = copyDirField.getText();
 				String copyToStr = targDirField.getText();
 				File dirToCopy = new File(dirToCopyStr);
@@ -163,7 +160,6 @@ public class CopyDirectory {
     private void setCloseButtonAction(JButton closeButton) {
     	closeButton.addActionListener(new ActionListener() {
 
-			@Override
             public void actionPerformed(ActionEvent e) {
 	            System.exit(0);
             }
