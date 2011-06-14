@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,8 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.SpringLayout;
-
-import org.openmrs.module.chirdlutil.util.IOUtil;
 
 /**
  * This class will take a given file, replace a given string in the file with another string.
@@ -67,7 +66,7 @@ public class FindAndReplace {
         contentPane.setLayout(layout);
 
         //Create and add the components.
-        JLabel label = new JLabel("Form Directory: ");
+        JLabel label = new JLabel("Form File/Directory: ");
         JLabel label2 = new JLabel("Find: ");
         JLabel label3 = new JLabel("Replace With: ");
         
@@ -123,7 +122,8 @@ public class FindAndReplace {
             public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(directoryField.getText());
 	            fileChooser.setDialogTitle("Choose Directory Containing Forms");
-	            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	            fileChooser.setMultiSelectionEnabled(false);
 	            int returnVal = fileChooser.showOpenDialog(frame);
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 //		            File[] selectedDirs = fileChooser.getSelectedFiles();
@@ -135,8 +135,8 @@ public class FindAndReplace {
 //		            	
 //		            	files.append(selectedDirs[i].getAbsolutePath());
 //		            }
-	            	File selectedDir = fileChooser.getSelectedFile();
-		            directoryField.setText(selectedDir.getAbsolutePath());
+	            	File selectedFile = fileChooser.getSelectedFile();
+		            directoryField.setText(selectedFile.getAbsolutePath());
 	            }
             }
     		
@@ -150,19 +150,15 @@ public class FindAndReplace {
 				String formDirStr = directoryField.getText();
 				String findStr = findField.getText();
 				String replaceStr = replaceField.getText();
-				File formDir = new File(formDirStr);
+				File formSource = new File(formDirStr);
 				
-				if (!formDir.exists()) {
-					JOptionPane.showMessageDialog(frame, "The form directory does not exist.", "Error", 
-						JOptionPane.ERROR_MESSAGE);
-					return;
-				} else if (!formDir.isDirectory()) {
-					JOptionPane.showMessageDialog(frame, "The form directory is not a directory.", "Error", 
+				if (!formSource.exists()) {
+					JOptionPane.showMessageDialog(frame, "The file/directory does not exist.", "Error", 
 						JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 					
-				Thread copyThread = new FindAndReplaceThread(frame, new File (formDirStr), findStr, replaceStr);
+				Thread copyThread = new FindAndReplaceThread(frame, formSource, findStr, replaceStr);
 				Component glassPane = frame.getGlassPane();
 				glassPane.setVisible(true);
 				glassPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -182,9 +178,15 @@ public class FindAndReplace {
     	});
     }
 	
-	public void searchAndReplace(File sourceDir, String searchString, String replaceString) 
+	public void searchAndReplace(File source, String searchString, String replaceString) 
 	throws FileNotFoundException, IOException {
-		File[] sourceFiles = sourceDir.listFiles();
+		File[] sourceFiles = null;
+		if (source.isDirectory()) {
+			sourceFiles = source.listFiles();
+		} else {
+			sourceFiles = new File[] { source };
+		}
+		
 		ProgressMonitor progressMonitor = new ProgressMonitor(frame, "Processing Files...", "", 0, sourceFiles.length);
 		progressMonitor.setMillisToDecideToPopup(1);
 		progressMonitor.setMillisToPopup(1);
@@ -239,16 +241,34 @@ public class FindAndReplace {
 			
 			sourceFile.delete();
 			sourceFile.createNewFile();
-			try {
-				IOUtil.copyFile(newFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-				newFile.delete();
-			} catch (Exception e) {
-				throw new IOException("Error copying file back to original.", e);
-			}
+			copyFile(newFile, sourceFile);
+			newFile.delete();
 			
 			progressMonitor.setProgress(++count);
 		}
 	}
+	
+	private void copyFile(File sourceFile, File destFile) throws IOException { 
+    	if(!destFile.exists()) {  
+    		destFile.createNewFile(); 
+    	} 
+    	
+    	FileChannel source = null; 
+    	FileChannel destination = null; 
+    	try {  
+    		source = new FileInputStream(sourceFile).getChannel();  
+    		destination = new FileOutputStream(destFile).getChannel();  
+    		destination.transferFrom(source, 0, source.size()); 
+    	} finally {  
+    		if(source != null) {   
+    			source.close();  
+    		}  
+    		
+    		if(destination != null) {   
+    			destination.close();  
+    		}
+    	}
+    }
 	
 	/**
 	 * Auto generated method comment
@@ -269,13 +289,13 @@ public class FindAndReplace {
 	private class FindAndReplaceThread extends Thread {
     	
     	private JFrame frame;
-    	private File formDir;
+    	private File formSource;
     	private String find;
     	private String replace;
     	
-    	public FindAndReplaceThread(JFrame frame, File formDir, String find, String replace) {
+    	public FindAndReplaceThread(JFrame frame, File formSource, String find, String replace) {
     		this.frame = frame;
-    		this.formDir = formDir;
+    		this.formSource = formSource;
     		this.find = find;
     		this.replace = replace;
     	}
@@ -283,7 +303,7 @@ public class FindAndReplace {
     	public void run() {
     		boolean success = false;
     		try {
-	            searchAndReplace(formDir, find, replace);
+	            searchAndReplace(formSource, find, replace);
 	            success = true;
             }
             catch (final Exception e) {
