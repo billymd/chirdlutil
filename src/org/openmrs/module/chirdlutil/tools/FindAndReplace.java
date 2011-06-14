@@ -51,7 +51,7 @@ public class FindAndReplace {
      */
     private void createAndShowGUI() {
         //Create and set up the window.
-        frame = new JFrame("Copy Directory");
+        frame = new JFrame("Find and Replace");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getGlassPane().addMouseListener(new MouseAdapter() {
         	
@@ -66,7 +66,7 @@ public class FindAndReplace {
         contentPane.setLayout(layout);
 
         //Create and add the components.
-        JLabel label = new JLabel("Form File/Directory: ");
+        JLabel label = new JLabel("File/Directory: ");
         JLabel label2 = new JLabel("Find: ");
         JLabel label3 = new JLabel("Replace With: ");
         
@@ -121,7 +121,7 @@ public class FindAndReplace {
 
             public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(directoryField.getText());
-	            fileChooser.setDialogTitle("Choose Directory Containing Forms");
+	            fileChooser.setDialogTitle("Choose a File or Directory");
 	            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	            fileChooser.setMultiSelectionEnabled(false);
 	            int returnVal = fileChooser.showOpenDialog(frame);
