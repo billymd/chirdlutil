@@ -30,6 +30,11 @@
    		<description>Directory of the archivefiles.</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>chirdlutil.logDirectory</property>
+   		<description>Directory of the archived tomcat log files.</description>
+	</globalProperty>
+	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->
 	<messages>
