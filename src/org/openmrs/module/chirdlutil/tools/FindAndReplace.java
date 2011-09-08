@@ -7,20 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -178,7 +174,8 @@ public class FindAndReplace {
     	});
     }
 	
-	public void searchAndReplace(File source, String searchString, String replaceString) 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    public void searchAndReplace(File source, String searchString, String replaceString) 
 	throws FileNotFoundException, IOException {
 		File[] sourceFiles = null;
 		if (source.isDirectory()) {
@@ -206,36 +203,58 @@ public class FindAndReplace {
 			
 			String origFilename = sourceFile.getName();
 			File parentDirectory = sourceFile.getParentFile();
-			FileInputStream inStream = new FileInputStream(sourceFile);
-			DataInputStream dataInStream = null;
+			FileInputStream fileReader = null;
 			File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
 			newFile.createNewFile();
-			FileOutputStream outStream = new FileOutputStream(newFile);
-			DataOutputStream dataOutStream = null;
+			FileOutputStream fileWriter = null;
+			byte[] searchBytes = searchString.getBytes();
+			byte[] replaceBytes = replaceString.getBytes();
+			int searchSize = searchBytes.length;
+			Queue byteQueue = new LinkedList();
 			try {
-				dataInStream = new DataInputStream(inStream);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(dataInStream));
-				dataOutStream = new DataOutputStream(outStream);
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(dataOutStream));
-				String line;
-				int i = 0;
-				while ((line = reader.readLine()) != null) {
-					if (i != 0) {
-						writer.append("\n");
-					}
-					
-					i++;
-					line = line.replace(searchString, replaceString);
-					writer.append(line);
-					writer.flush();
-				}
+				fileReader = new FileInputStream(sourceFile);
+				fileWriter = new FileOutputStream(newFile);
+				int c;
+	            while ((c = fileReader.read()) != -1) {
+	            	byteQueue.add(c);
+	            	while (byteQueue.size() > searchSize) {
+	            		fileWriter.write((Integer)byteQueue.poll());
+	            	}
+	            	
+	            	if (byteQueue.size() < searchSize) {
+	            		continue;
+	            	}
+	            	
+	            	Integer[] byteArray = new Integer[byteQueue.size()];
+	            	byteQueue.toArray(byteArray);
+	            	boolean match = true;
+	            	for (int i = 0; i < byteArray.length; i++) {
+	            		int fileByte = byteArray[i];
+	            		int searchByte = searchBytes[i];
+	            		if (fileByte != searchByte) {
+	            			match = false;
+	            			break;
+	            		}
+	            	}
+	            	
+	            	if (match) {
+	            		byteQueue.clear();
+	            		for (int i = 0; i < replaceBytes.length; i++) {
+	            			byteQueue.add((int)replaceBytes[i]);
+	            		}
+	            	}
+	            }
+	            
+	            while (!byteQueue.isEmpty()) {
+	            	fileWriter.write((Integer)byteQueue.poll());
+	            }
 			} finally {
-				if (dataInStream != null) {
-					dataInStream.close();
+				if (fileReader != null) {
+					fileReader.close();
 				}
-				if (dataOutStream != null) {
-					dataOutStream.flush();
-					dataOutStream.close();
+				if (fileWriter != null) {
+					fileWriter.flush();
+					fileWriter.close();
 				}
 			}
 			
