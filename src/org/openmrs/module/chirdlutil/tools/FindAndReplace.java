@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -203,17 +205,17 @@ public class FindAndReplace {
 			
 			String origFilename = sourceFile.getName();
 			File parentDirectory = sourceFile.getParentFile();
-			FileInputStream fileReader = null;
+			BufferedInputStream fileReader = null;
 			File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
 			newFile.createNewFile();
-			FileOutputStream fileWriter = null;
+			BufferedOutputStream fileWriter = null;
 			byte[] searchBytes = searchString.getBytes();
 			byte[] replaceBytes = replaceString.getBytes();
 			int searchSize = searchBytes.length;
 			Queue byteQueue = new LinkedList();
 			try {
-				fileReader = new FileInputStream(sourceFile);
-				fileWriter = new FileOutputStream(newFile);
+				fileReader = new BufferedInputStream(new FileInputStream(sourceFile));
+				fileWriter = new BufferedOutputStream(new FileOutputStream(newFile));
 				int c;
 	            while ((c = fileReader.read()) != -1) {
 	            	byteQueue.add(c);
