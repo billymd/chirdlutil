@@ -73,9 +73,6 @@ public class LogArchiveCron extends AbstractTask
 	    super.initialize(config);
 		Context.openSession();
 		
-		if (Context.isAuthenticated() == false)
-			authenticate();
-		
 		try 
 		{
 		    init(config);

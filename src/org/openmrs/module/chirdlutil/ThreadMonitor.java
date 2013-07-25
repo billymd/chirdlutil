@@ -38,7 +38,7 @@ public class ThreadMonitor implements Runnable {
 	public ThreadMonitor() {
 	}
 	
-	private static synchronized void startThread(ReadWriteManager waitingThreadsLock, Integer locationId, Thread thread,
+	private static void startThread(ReadWriteManager waitingThreadsLock, Integer locationId, Thread thread,
 	                                             Hashtable<Integer, Vector<Thread>> waitingThreads, Integer priority) {
 		try {
 			
@@ -68,12 +68,12 @@ public class ThreadMonitor implements Runnable {
 		}
 	}
 	
-	public static synchronized void startHighPriorityThread(Integer locationId, Thread thread) {
+	public static void startHighPriorityThread(Integer locationId, Thread thread) {
 		Integer priority = Thread.NORM_PRIORITY + 1;
 		startThread(waitingHighPriorityThreadsLock, locationId, thread, waitingHighPriorityThreads, priority);
 	}
 	
-	public static synchronized void startLowPriorityThread(Integer locationId, Thread thread) {
+	public static void startLowPriorityThread(Integer locationId, Thread thread) {
 		Integer priority = Thread.NORM_PRIORITY;
 		startThread(waitingLowPriorityThreadsLock, locationId, thread, waitingLowPriorityThreads, priority);
 	}

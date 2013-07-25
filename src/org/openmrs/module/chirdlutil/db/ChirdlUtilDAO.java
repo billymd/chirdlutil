@@ -4,37 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
-import org.openmrs.module.chirdlutil.hibernateBeans.LocationAttributeValue;
-import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttribute;
-import org.openmrs.module.chirdlutil.hibernateBeans.LocationTagAttributeValue;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ChirdlUtil related database functions
  * 
  * @author Tammy Dugan
  */
+@Transactional
 public interface ChirdlUtilDAO {
-	
-	public LocationTagAttributeValue getLocationTagAttributeValue(Integer locationTagId, String locationTagAttributeName,
-	                                                              Integer locationId);
-	
-	public LocationAttributeValue getLocationAttributeValue(Integer locationId, String locationAttributeName);
-	
-	public LocationTagAttributeValue getLocationTagAttributeValueById(Integer location_tag_attribute_value_id);
-	
-	public LocationTagAttribute getLocationTagAttribute(Integer locationTagAttributeId);
-	
-	public LocationTagAttribute getLocationTagAttribute(String locationTagAttributeName);
-	
-	public LocationTagAttribute saveLocationTagAttribute(LocationTagAttribute value);
-	
-	public LocationTagAttributeValue saveLocationTagAttributeValue(LocationTagAttributeValue value);
-	
-	public LocationAttributeValue saveLocationAttributeValue(LocationAttributeValue value);
-	
-	public void deleteLocationTagAttribute(LocationTagAttribute value);
-	
-	public void deleteLocationTagAttributeValue(LocationTagAttributeValue value);
 	
 	/**
 	 * Logs an event to the database.
@@ -64,4 +42,18 @@ public interface ChirdlUtilDAO {
 	 */
 	public List<EventLog> getEventLogs(Integer eventId, Integer locationId, Integer formId, Integer studyId, String event, 
 		Date startDate, Date endDate, Integer userId, String description);
+
+	/**
+	 * Returns true if the table already exists in the database
+	 * @param tableName name of the table to check
+	 * @return boolean true if the table exists in the database
+	 */
+	public boolean tableExists(String tableName);
+	
+	/**
+	 * Executes an sql string
+	 * @param sql sql string to execute
+	 */
+	public void executeSql(String sql);
+	
 }

@@ -10,6 +10,7 @@
             <props>
   				<prop key="/module/@MODULE_ID@/memoryLeakMonitor.form">memoryLeakMonitor</prop>
   				<prop key="/module/@MODULE_ID@/logViewer.form">logViewer</prop>
+  				<prop key="/module/@MODULE_ID@/threadPoolMonitor.form">threadPoolMonitor</prop>
 			</props>
 		</property>
 	</bean>
@@ -22,6 +23,11 @@
         <property name="commandName"><value>logViewerObject</value></property>
         <property name="formView"><value>/module/@MODULE_ID@/logViewer</value></property>
         <property name="successView"><value>logViewer.form</value></property>
+    </bean>
+    <bean id="threadPoolMonitor" class="@MODULE_PACKAGE@.web.ThreadPoolMonitorController">
+        <property name="commandName"><value>threadPoolMonitorObject</value></property>
+        <property name="formView"><value>/module/@MODULE_ID@/threadPoolMonitor</value></property>
+        <property name="successView"><value>threadPoolMonitor.form</value></property>
     </bean>
     <bean parent="serviceContext">
 		<property name="moduleService">

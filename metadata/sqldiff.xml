@@ -79,9 +79,9 @@ CREATE TABLE `chirdlutil_location_tag_attribute_value` (
 		<sql>
 				INSERT INTO 
 						scheduler_task_config 
- 								(`name`, `schedulable_class`, `start_time`, `start_time_pattern`, `repeat_interval`, `start_on_startup`, `started`, `created_by`, `date_created`)
+ 								(`name`, `schedulable_class`, `start_time`, `start_time_pattern`, `repeat_interval`, `start_on_startup`, `started`, `created_by`, `date_created`, `uuid`)
 				SELECT 
-								'Cron job archiving Tomcat log files','org.openmrs.module.chirdlutil.LogArchiveCron', NOW(), 'MM/dd/yyyy HH:mm:ss', 604800, 1, 0, 1, NOW() 
+								'Cron job archiving Tomcat log files','org.openmrs.module.chirdlutil.LogArchiveCron', NOW(), 'MM/dd/yyyy HH:mm:ss', 604800, 1, 0, 1, NOW(), UUID() 
 				FROM 
 							(select count(*) as cnt from scheduler_task_config where name='Cron job archiving Tomcat log files')  a
 				WHERE	a.cnt=0;
@@ -106,6 +106,70 @@ CREATE TABLE `chirdlutil_location_tag_attribute_value` (
 				  description varchar(255) default NULL, 
 				  PRIMARY KEY (event_id)
 				  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </diff>
+   
+<diff>
+        <version>1.0.3</version>
+        <author>Tammy Dugan</author>
+        <date>June 9 2011</date>
+        <description>
+                Changed location of SSN validator class
+        </description>
+        <sql>
+                update patient_identifier_type 
+set validator = 'org.openmrs.module.chirdlutil.SSNValidator'
+where name = 'SSN'
+        </sql>
+    </diff>
+    <diff>
+        <version>1.0.4</version>
+        <author>Tammy Dugan</author>
+        <date>June 28 2011</date>
+        <description>
+                Move data to renamed tables and drop old tables.
+        </description>
+        <sql>
+Insert into chirdlutilbackports_location_attribute
+select * from chirdlutil_location_attribute;
+
+Insert into chirdlutilbackports_location_attribute_value
+select * from chirdlutil_location_attribute_value;
+
+Insert into chirdlutilbackports_location_tag_attribute
+select * from chirdlutil_location_tag_attribute;
+
+Insert into chirdlutilbackports_location_tag_attribute_value
+select * from chirdlutil_location_tag_attribute_value;
+
+drop TABLE IF EXISTS chirdlutil_location_attribute_value;
+drop TABLE IF EXISTS chirdlutil_location_attribute;
+drop TABLE IF EXISTS chirdlutil_location_tag_attribute_value;
+drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
+</sql>
+    </diff>
+    <diff>
+        <version>1.0.5</version>
+        <author>Steve McKee</author>
+        <date>November 8 2012</date>
+        <description>
+             Remove not null constraint on the user_id column of the chirdlutil_event_log table.
+        </description>
+        <sql>
+             ALTER TABLE chirdlutil_event_log CHANGE user_id user_id int(11) DEFAULT NULL;
+        </sql>
+    </diff>
+    <diff>
+        <version>1.0.6</version>
+        <author>Steve McKee</author>
+        <date>May 29, 2013</date>
+        <description>
+            Update global property.
+        </description>
+        <sql>
+           update global_property set property_value = 
+           (select t.property_value from (select * from global_property) t where t.property = 'chicaops.dashboardSmtpMailHost')
+           where property = 'chirdlutil.smtpMailHost';
         </sql>
     </diff>
 </sqldiff>

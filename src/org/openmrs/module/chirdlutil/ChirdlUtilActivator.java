@@ -7,8 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.api.context.ContextAuthenticationException;
-import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.chirdlutil.util.Util;
 
 /**
@@ -17,14 +16,14 @@ import org.openmrs.module.chirdlutil.util.Util;
  * @author Tammy Dugan
  *
  */
-public class ChirdlUtilActivator implements Activator {
+public class ChirdlUtilActivator extends BaseModuleActivator {
 
 	private Log log = LogFactory.getLog(this.getClass());
 
 	/**
-	 * @see org.openmrs.module.Activator#startup()
+	 * @see org.openmrs.module.BaseModuleActivator#started()
 	 */
-	public void startup() {
+	public void started() {
 		this.log.info("Starting ChirdlUtil Module");
 		
 		//check that all the required global properties are set
@@ -37,8 +36,8 @@ public class ChirdlUtilActivator implements Activator {
 		{
 			AdministrationService adminService = Context.getAdministrationService();
 			Context.authenticate(adminService
-					.getGlobalProperty("scheduler.username"), adminService
-					.getGlobalProperty("scheduler.password"));
+				.getGlobalProperty("scheduler.username"), adminService
+				.getGlobalProperty("scheduler.password"));
 			Iterator<GlobalProperty> properties = adminService
 					.getAllGlobalProperties().iterator();
 			GlobalProperty currProperty = null;
@@ -59,7 +58,7 @@ public class ChirdlUtilActivator implements Activator {
 					}
 				}
 			}
-		} catch (ContextAuthenticationException e)
+		} catch (Exception e)
 		{
 			this.log.error("Error checking global properties for chirdlutil module");
 			this.log.error(e.getMessage());
@@ -69,9 +68,9 @@ public class ChirdlUtilActivator implements Activator {
 	}
 	
 	/**
-	 * @see org.openmrs.module.Activator#shutdown()
+	 * @see org.openmrs.module.BaseModuleActivator#stopped()
 	 */
-	public void shutdown() {
+	public void stopped() {
 		this.log.info("Shutting down ChirdlUtil Module");
 	}
 
