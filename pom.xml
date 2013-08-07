@@ -111,5 +111,13 @@ lib/zip4j_1.3.1.jar
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<distributionManagement>
+     <repository>
+          <id>openmrs-repo-modules</id>
+          <name>OpenMRS Modules</name>
+          <url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
+     </repository>
+    </distributionManagement>
 
 </project>
