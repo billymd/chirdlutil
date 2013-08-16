@@ -15,7 +15,7 @@ package org.openmrs.module.chirdlutil.util.voice;
 
 import java.util.Date;
 
-import org.openmrs.Patient;
+import org.openmrs.Person;
 
 
 /**
@@ -24,9 +24,10 @@ import org.openmrs.Patient;
  */
 public class VoiceCallRequest {
 
-	private Patient patient;
+	private Person patient;
 	private Integer locationId;
 	private Date appointmentDate;
+	private String phoneNumber;
 	
 	/**
 	 * Constructor method
@@ -35,10 +36,11 @@ public class VoiceCallRequest {
 	 * @param locationId The clinic location of the appointment.
 	 * @param appointmentDate The date/time of the appointment.
 	 */
-	public VoiceCallRequest(Patient patient, Integer locationId, Date appointmentDate) {
+	public VoiceCallRequest(Person patient, Integer locationId, Date appointmentDate, String phoneNumber) {
 		this.patient = patient;
 		this.locationId = locationId;
 		this.appointmentDate = appointmentDate;
+		this.phoneNumber = phoneNumber;
 		
 		if (patient == null) {
 			throw new IllegalArgumentException("Patient cannot be null.");
@@ -46,16 +48,17 @@ public class VoiceCallRequest {
 			throw new IllegalArgumentException("locationId cannot be null");
 		} else if (appointmentDate == null) {
 			throw new IllegalArgumentException("appointmentDate cannot be null");
+		} else if (phoneNumber == null) {
+			throw new IllegalArgumentException("phoneNumber cannot be null");
 		}
 	}
 	
 	/**
      * @return the patient
      */
-    public Patient getPatient() {
+    public Person getPatient() {
     	return patient;
     }
-
 	
     /**
      * @return the locationId
@@ -63,12 +66,18 @@ public class VoiceCallRequest {
     public Integer getLocationId() {
     	return locationId;
     }
-
 	
     /**
      * @return the appointmentDate
      */
     public Date getAppointmentDate() {
     	return appointmentDate;
+    }
+    
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+    	return phoneNumber;
     }
 }
