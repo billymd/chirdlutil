@@ -229,13 +229,21 @@ public class AppointmentVoiceCalls extends AbstractTask {
 	            appointmentDate = formatter.parse(appointment.getApptDate());
             }
             catch (ParseException e) {
-	            log.error("Error parsing appointment date for mrn: " + mrn, e);
+	            log.error("Error parsing appointment date " + appointment.getApptDate() + " for mrn: " + mrn, e);
 	            continue;
+            }
+            
+            Date appointmentTime = null;
+            try {
+            	appointmentTime = formatter.parse(appointment.getApptTime());
+            } catch (ParseException e) {
+            	log.error("Error parsing appointment time " + appointment.getApptTime() + " for mrn: " + mrn, e);
+            	// Continue even though it fails.  This is not terribly important.
             }
             
 			// Add the request.
 			VoiceCallRequest request = new VoiceCallRequest(obs.getPerson(), obs.getLocation().getLocationId(), 
-				appointmentDate, phoneNumber);
+				appointmentDate, appointmentTime, phoneNumber);
 			
 			CallInfo call = new CallInfo(request, obs.getEncounter().getEncounterId(), callMadeConcept);
 			callInfo.add(call);

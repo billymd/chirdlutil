@@ -1,6 +1,23 @@
+/**
+ * The contents of this file are subject to the OpenMRS Public License
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://license.openmrs.org
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+ */
 package org.openmrs.module.chirdlutil.util.voice;
 
-
+/**
+ * Beaning containg the information provided fromt the appointment scheduling system.
+ *
+ * @author Steve McKee
+ */
 public class Appointment {
 
 	private String encounterId;
@@ -13,10 +30,12 @@ public class Appointment {
 	private String mrn;
 	private String status;
 	
+	/**
+	 * Constructor Method
+	 */
 	public Appointment() {
 	}
 
-	
     /**
      * @return the encounterId
      */
@@ -24,14 +43,12 @@ public class Appointment {
     	return encounterId;
     }
 
-	
     /**
      * @param encounterId the encounterId to set
      */
     public void setEncounterId(String encounterId) {
     	this.encounterId = encounterId;
     }
-
 	
     /**
      * @return the firstName
@@ -39,7 +56,6 @@ public class Appointment {
     public String getFirstName() {
     	return firstName;
     }
-
 	
     /**
      * @param firstName the firstName to set
@@ -47,7 +63,6 @@ public class Appointment {
     public void setFirstName(String firstName) {
     	this.firstName = firstName;
     }
-
 	
     /**
      * @return the lastName
@@ -55,7 +70,6 @@ public class Appointment {
     public String getLastName() {
     	return lastName;
     }
-
 	
     /**
      * @param lastName the lastName to set
@@ -63,7 +77,6 @@ public class Appointment {
     public void setLastName(String lastName) {
     	this.lastName = lastName;
     }
-
 	
     /**
      * @return the phoneNumber
@@ -71,7 +84,6 @@ public class Appointment {
     public String getPhoneNumber() {
     	return phoneNumber;
     }
-
 	
     /**
      * @param phoneNumber the phoneNumber to set
@@ -79,7 +91,6 @@ public class Appointment {
     public void setPhoneNumber(String phoneNumber) {
     	this.phoneNumber = phoneNumber;
     }
-
 	
     /**
      * @return the apptDate
@@ -87,7 +98,6 @@ public class Appointment {
     public String getApptDate() {
     	return apptDate;
     }
-
 	
     /**
      * @param apptDate the apptDate to set
@@ -95,7 +105,6 @@ public class Appointment {
     public void setApptDate(String apptDate) {
     	this.apptDate = apptDate;
     }
-
 	
     /**
      * @return the apptTime
@@ -103,7 +112,6 @@ public class Appointment {
     public String getApptTime() {
     	return apptTime;
     }
-
 	
     /**
      * @param apptTime the apptTime to set
@@ -111,7 +119,6 @@ public class Appointment {
     public void setApptTime(String apptTime) {
     	this.apptTime = apptTime;
     }
-
 	
     /**
      * @return the clinicLocation
@@ -119,7 +126,6 @@ public class Appointment {
     public String getClinicLocation() {
     	return clinicLocation;
     }
-
 	
     /**
      * @param clinicLocation the clinicLocation to set
@@ -127,7 +133,6 @@ public class Appointment {
     public void setClinicLocation(String clinicLocation) {
     	this.clinicLocation = clinicLocation;
     }
-
 	
     /**
      * @return the mrn
@@ -135,7 +140,6 @@ public class Appointment {
     public String getMrn() {
     	return mrn;
     }
-
 	
     /**
      * @param mrn the mrn to set
@@ -143,7 +147,6 @@ public class Appointment {
     public void setMrn(String mrn) {
     	this.mrn = mrn;
     }
-
 	
     /**
      * @return the status
@@ -151,7 +154,6 @@ public class Appointment {
     public String getStatus() {
     	return status;
     }
-
 	
     /**
      * @param status the status to set
@@ -159,6 +161,4 @@ public class Appointment {
     public void setStatus(String status) {
     	this.status = status;
     }
-
-	
 }

@@ -27,6 +27,7 @@ public class VoiceCallRequest {
 	private Person patient;
 	private Integer locationId;
 	private Date appointmentDate;
+	private Date appointmentTime;
 	private String phoneNumber;
 	
 	/**
@@ -34,12 +35,15 @@ public class VoiceCallRequest {
 	 * 
 	 * @param patient The patient to be called.
 	 * @param locationId The clinic location of the appointment.
-	 * @param appointmentDate The date/time of the appointment.
+	 * @param appointmentDate The date of the appointment.
+	 * @param appointmentTime The time of the appointment.
 	 */
-	public VoiceCallRequest(Person patient, Integer locationId, Date appointmentDate, String phoneNumber) {
+	public VoiceCallRequest(Person patient, Integer locationId, Date appointmentDate, Date appointmentTime, 
+	                        String phoneNumber) {
 		this.patient = patient;
 		this.locationId = locationId;
 		this.appointmentDate = appointmentDate;
+		this.appointmentTime = appointmentTime;
 		this.phoneNumber = phoneNumber;
 		
 		if (patient == null) {
@@ -72,6 +76,13 @@ public class VoiceCallRequest {
      */
     public Date getAppointmentDate() {
     	return appointmentDate;
+    }
+    
+    /**
+     * @return the appointmentTime
+     */
+    public Date getAppointmentTime() {
+    	return appointmentTime;
     }
     
     /**

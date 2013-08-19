@@ -192,11 +192,17 @@ public class VoiceSystemUtil {
 			}
 			
 			Date apptDate = callRequest.getAppointmentDate();
+			Date apptTime = callRequest.getAppointmentTime();
 			String apptDateStr = dateFormatter.format(apptDate);
-			String apptTime = timeFormatter.format(apptDate);
+			String apptTimeStr = null;
+			if (apptTime != null) {
+				apptTimeStr = timeFormatter.format(apptTime);
+			} else {
+				apptTimeStr = timeFormatter.format(apptDate);
+			}
 			
 			patientFileText += "\n" + personId + "\t" + firstName + "\t" + lastName + "\t" + phoneNumber + "\t" + 
-				apptDateStr + "\t" + apptTime + "\t" + locationName;
+				apptDateStr + "\t" + apptTimeStr + "\t" + locationName;
 		}
 		
 		locationNameMap.clear();
