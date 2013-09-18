@@ -188,4 +188,20 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
         where a.cnt=0;
     </sql>
     </diff>
+    <diff>
+        <version>1.0.8</version>
+        <author>Steve McKee</author>
+        <date>September 9, 2013</date>
+        <description>
+        New location attribute for the appointment clinic name.  This is the name to match for the voice calls in the hospital appointment file.
+        </description>
+    <sql>
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('clinicAppointmentName', 'This is the clinic name to find for the voice calls in the hospital appointment file.');
+        
+        insert into chirdlutilbackports_location_attribute_value (location_id, value, location_attribute_id) 
+        select a.location_id, '', (select location_attribute_id from chirdlutilbackports_location_attribute where name='clinicAppointmentName')
+        from location a;
+    </sql>
+    </diff>
 </sqldiff>

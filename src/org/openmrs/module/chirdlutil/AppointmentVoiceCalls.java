@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -42,6 +44,8 @@ import org.openmrs.module.chirdlutil.util.Util;
 import org.openmrs.module.chirdlutil.util.voice.Appointment;
 import org.openmrs.module.chirdlutil.util.voice.VoiceCallRequest;
 import org.openmrs.module.chirdlutil.util.voice.VoiceSystemUtil;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.LocationAttributeValue;
+import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.scheduler.tasks.AbstractTask;
 import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
@@ -54,7 +58,7 @@ import org.openmrs.util.OpenmrsConstants.PERSON_TYPE;
 public class AppointmentVoiceCalls extends AbstractTask {
 	
 	private Log log = LogFactory.getLog(this.getClass());
-	private static final Integer APPT_TIME_SPAN = 30;
+	private static final Integer DEFAULT_APPT_TIME_SPAN = 30;
 	
 	@Override
 	public void initialize(TaskDefinition config) {
@@ -162,8 +166,24 @@ public class AppointmentVoiceCalls extends AbstractTask {
 		answerList.add(callScheduled);
 		List<PERSON_TYPE> personTypeList = new ArrayList<PERSON_TYPE>();
 		personTypeList.add(PERSON_TYPE.PATIENT);
+		String timeSpanStr = getTaskDefinition().getProperty("type2CallSpan");
+		Integer timeSpan = null;
+		if (timeSpanStr == null || timeSpanStr.trim().length() == 0) {
+			log.error("The task property 'type2CallSpan' does not exist.  The default value of " + 
+				DEFAULT_APPT_TIME_SPAN + " days will be used");
+			timeSpan = DEFAULT_APPT_TIME_SPAN;
+		}
+		
+		try {
+			timeSpan = Integer.parseInt(timeSpanStr);
+		} catch (NumberFormatException e) {
+			log.error("The task property 'type2CallSpan' contains an invalid.  The default value of " + 
+				DEFAULT_APPT_TIME_SPAN + " days will be used");
+			timeSpan = DEFAULT_APPT_TIME_SPAN;
+		}
+		
 		Calendar startCal = Calendar.getInstance();
-		startCal.set(GregorianCalendar.DAY_OF_MONTH, startCal.get(GregorianCalendar.DAY_OF_MONTH) - APPT_TIME_SPAN);
+		startCal.set(GregorianCalendar.DAY_OF_MONTH, startCal.get(GregorianCalendar.DAY_OF_MONTH) - timeSpan);
 		Date startDate = startCal.getTime();
 		
 		List<Obs> obsList = Context.getObsService().getObservations(null, null, conceptList, answerList, personTypeList, 
@@ -209,6 +229,8 @@ public class AppointmentVoiceCalls extends AbstractTask {
         Set<Integer> patientsToCall = new HashSet<Integer>();
         PatientService patientService = Context.getPatientService();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Map<Integer, String> locToLocNameMap = new HashMap<Integer, String>();
+        ChirdlUtilBackportsService backportsService = Context.getService(ChirdlUtilBackportsService.class);
 		for (Obs obs : obsList) {
 			Integer patientId = obs.getPersonId();
 			if (patientsToCall.contains(patientId)) {
@@ -218,7 +240,20 @@ public class AppointmentVoiceCalls extends AbstractTask {
 			Patient patient = patientService.getPatient(patientId);
 			String mrn = patient.getPatientIdentifier().getIdentifier();
 			mrn = mrn.replaceAll("-", "");
-			Appointment appointment = findAppointment(mrn, appointments);
+			Integer locationId = obs.getLocation().getLocationId();
+			String locName = locToLocNameMap.get(locationId);
+			if (locName == null) {
+				LocationAttributeValue lav = backportsService.getLocationAttributeValue(locationId, "clinicAppointmentName");
+				if (lav == null || lav.getValue() == null || lav.getValue().trim().length() == 0) {
+					log.error("Please specify a location attribute for 'clinicAppointmentName'.");
+					continue;
+				}
+				
+				locName = lav.getValue();
+				locToLocNameMap.put(locationId, locName);
+			}
+			
+			Appointment appointment = findAppointment(mrn, locName, appointments);
 			if (appointment == null) {
 				continue;
 			}
@@ -251,6 +286,7 @@ public class AppointmentVoiceCalls extends AbstractTask {
 		}
 		
 		patientsToCall.clear();
+		locToLocNameMap.clear();
 		log.info("Type 2 Diabetes has " + callInfo.size() + " patient calls pending.");
 		return callInfo;
 	}
@@ -259,12 +295,14 @@ public class AppointmentVoiceCalls extends AbstractTask {
 	 * Searches the upcoming appointments to find a match for a MRN.
 	 * 
 	 * @param mrn The MRN to find in the appointment list.
+	 * @param apptClinicName The String that must be found somewhere in the appointment clinic.
 	 * @param appointments List of appointments to search.
 	 * @return Appointment object if a match is found, null otherwise.
 	 */
-	private Appointment findAppointment(String mrn, List<Appointment> appointments) {
+	private Appointment findAppointment(String mrn, String apptClinicName, List<Appointment> appointments) {
 		for (Appointment appointment : appointments) {
-			if (mrn.equals(appointment.getMrn())) {
+			if (mrn.equals(appointment.getMrn()) && appointment.getClinicLocation() != null && 
+					appointment.getClinicLocation().contains(apptClinicName)) {
 				return appointment;
 			}
 		}
