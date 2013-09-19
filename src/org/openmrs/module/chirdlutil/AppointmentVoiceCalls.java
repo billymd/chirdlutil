@@ -78,12 +78,18 @@ public class AppointmentVoiceCalls extends AbstractTask {
 			
 			List<VoiceCallRequest> voiceRequests = new ArrayList<VoiceCallRequest>();
 			for (CallInfo call : callInfo) {
-				voiceRequests.add(call.getVoiceCallRequest());
+				VoiceCallRequest request = call.getVoiceCallRequest();
+				log.info("Appointment Call Attempt--MRN: " + call.getMRN() + " Phone: " + request.getPhoneNumber());
+				voiceRequests.add(request);
 			}
 			
 			// Upload the call data.
-			String result = VoiceSystemUtil.uploadCallData(voiceRequests);
-			log.info("Result of posting call data to voice service: " + result);
+			String logCallsOnly = getTaskDefinition().getProperty("logCallsOnly");
+			String result = "Successful";
+			if (logCallsOnly == null || !logCallsOnly.equalsIgnoreCase("true")) {
+				result = VoiceSystemUtil.uploadCallData(voiceRequests);
+				log.info("Result of posting call data to voice service: " + result);
+			}
 			
 			if (result != null && result.equalsIgnoreCase("Successful")) {
 				// Record an observation stating we made the calls.
@@ -280,7 +286,7 @@ public class AppointmentVoiceCalls extends AbstractTask {
 			VoiceCallRequest request = new VoiceCallRequest(obs.getPerson(), obs.getLocation().getLocationId(), 
 				appointmentDate, appointmentTime, phoneNumber);
 			
-			CallInfo call = new CallInfo(request, obs.getEncounter().getEncounterId(), callMadeConcept);
+			CallInfo call = new CallInfo(request, obs.getEncounter().getEncounterId(), callMadeConcept, mrn);
 			callInfo.add(call);
 			patientsToCall.add(patientId);
 		}
@@ -344,17 +350,21 @@ public class AppointmentVoiceCalls extends AbstractTask {
 		private VoiceCallRequest voiceCallRequest;
 		private Integer encounterId;
 		private Concept conceptQuestion;
+		private String mrn;
 		
 		/**
 		 * Constructor method
 		 * 
 		 * @param voiceCallRequest The VoiceCallRequest object containing the information for the voice call system.
-		 * @param voiceCallComplete ObsAttributeValue object to save when the voice call upload is successful.
+		 * @param encounterId The encounter ID.
+		 * @param conceptQuestion The Concept that will have an answer saved to determine the call was made.
+		 * @param mrn The patient MRN identifier.
 		 */
-		public CallInfo(VoiceCallRequest voiceCallRequest, Integer encounterId, Concept conceptQuestion) {
+		public CallInfo(VoiceCallRequest voiceCallRequest, Integer encounterId, Concept conceptQuestion, String mrn) {
 			this.voiceCallRequest = voiceCallRequest;
 			this.encounterId = encounterId;
 			this.conceptQuestion = conceptQuestion;
+			this.mrn = mrn;
 		}
 		
         /**
@@ -376,6 +386,13 @@ public class AppointmentVoiceCalls extends AbstractTask {
          */
         public Concept getConceptQuestion() {
         	return conceptQuestion;
+        }
+        
+        /**
+         * @return the mrn
+         */
+        public String getMRN() {
+        	return mrn;
         }
 	}
 }
