@@ -307,7 +307,8 @@ public class AppointmentVoiceCalls extends AbstractTask {
 	 */
 	private Appointment findAppointment(String mrn, String apptClinicName, List<Appointment> appointments) {
 		for (Appointment appointment : appointments) {
-			if (mrn.equals(appointment.getMrn()) && appointment.getClinicLocation() != null && 
+			String apptMrn = appointment.getMrn();
+			if (apptMrn != null && apptMrn.contains(mrn) && appointment.getClinicLocation() != null && 
 					appointment.getClinicLocation().contains(apptClinicName)) {
 				return appointment;
 			}
