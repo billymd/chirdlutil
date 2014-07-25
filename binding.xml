@@ -1,0 +1,23 @@
+<binding>
+  <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig" name="serverConfig">
+        <structure field="mobileClients" usage="optional"/>
+  </mapping>
+  <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClients" name="mobileClients">
+        <collection field="mobileClients">
+            <structure name="mobileClient" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient">
+                <value name="user" field="user" />
+                <structure field="mobileForms" />
+            </structure>
+        </collection>
+  </mapping>
+  <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForms" name="mobileForms">
+        <collection field="mobileForms">
+            <structure name="mobileForm" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm">
+                <value name="name" field="name" />
+                <value name="startState" field="startState" />
+                <value name="endState" field="endState" />
+                <value name="pageUrl" field="pageUrl" />
+            </structure>
+        </collection>
+  </mapping>
+</binding>

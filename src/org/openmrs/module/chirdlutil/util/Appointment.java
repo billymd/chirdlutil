@@ -11,10 +11,10 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.chirdlutil.util.voice;
+package org.openmrs.module.chirdlutil.util;
 
 /**
- * Beaning containg the information provided fromt the appointment scheduling system.
+ * Beaning containg the information provided from the appointment scheduling system.
  *
  * @author Steve McKee
  */

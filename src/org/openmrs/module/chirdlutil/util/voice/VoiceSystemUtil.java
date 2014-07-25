@@ -13,16 +13,10 @@
  */
 package org.openmrs.module.chirdlutil.util.voice;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +31,6 @@ import org.openmrs.module.chirdlutil.util.HttpUtil;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.LocationAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.bean.CsvToBean;
-import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
-
 
 /**
  * Utility class for communicating with the voice system.
@@ -50,8 +40,6 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 public class VoiceSystemUtil {
 	
 	private static Log log = LogFactory.getLog(VoiceSystemUtil.class);
-	private static final String APPOINTMENT_FILE_NAME = "Appointments";
-	private static final String APPOINTMENT_FILE_EXTENSION = ".csv";
 
 	/**
 	 * Uploads entries to the voice system service.
@@ -220,69 +208,6 @@ public class VoiceSystemUtil {
 		// Perform the POST
 		String result = HttpUtil.postSecure("SSLv3", host, url, data, connectionTimeout, port);
 		return result;
-	}
-	
-	/**
-	 * Get the list of appointments for the next business day.
-	 * 
-	 * @return List of Appointment objects
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public static List<Appointment> getAppointments() throws FileNotFoundException, IOException {
-		String csvFileLocStr = Context.getAdministrationService().getGlobalProperty("chirdlutil.appointmentCsvFileLocation");
-		if (csvFileLocStr == null || csvFileLocStr.trim().length() == 0) {
-			log.error("No global property value set for chirdlutil.appointmentCsvFileLocation.  Appointments " +
-					"cannot be located.");
-			return new ArrayList<Appointment>();
-		}
-		
-		File csvLocFile = new File(csvFileLocStr);
-		if (!csvLocFile.exists() || !csvLocFile.canRead()) {
-			log.error("Cannot find/read appointments file from location " + csvFileLocStr);
-			return new ArrayList<Appointment>();
-		}
-		
-		Calendar cal = Calendar.getInstance();
-		// Add a day to the date for tomorrow's appointments.
-		cal.add(Calendar.DAY_OF_MONTH, 1);
-		Date date = cal.getTime();
-		DateFormat formatter = new SimpleDateFormat("MMddyyyy");
-		String dateStr = formatter.format(date);
-		String filename = APPOINTMENT_FILE_NAME + " " + dateStr + APPOINTMENT_FILE_EXTENSION;
-		File csvFile = new File(csvLocFile, filename);
-		if (!csvFile.exists() || !csvFile.canRead()) {
-			log.error("Cannot find/read appointments file: " + csvFileLocStr + File.separator + filename);
-			return new ArrayList<Appointment>();
-		}
-		
-		InputStreamReader inStreamReader = new InputStreamReader(new FileInputStream(csvFile), "UTF-16");
-		CSVReader reader = new CSVReader(inStreamReader, '|');
-		HeaderColumnNameTranslateMappingStrategy<Appointment> strat = 
-			new HeaderColumnNameTranslateMappingStrategy<Appointment>();
-		
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("encounterID", "encounterId");
-		map.put("First Name", "firstName");
-		map.put("Last Name", "lastName");
-		map.put("Phone Number", "phoneNumber");
-		map.put("Appt. Date", "apptDate");
-		map.put("Appt. Time", "apptTime");
-		map.put("Clinic Location", "clinicLocation");
-		map.put("MRN", "mrn");
-		map.put("Status", "status");
-		
-		strat.setType(Appointment.class);
-		strat.setColumnMapping(map);
-		
-		CsvToBean<Appointment> csv = new CsvToBean<Appointment>();
-		List<Appointment> list = csv.parse(strat, reader);
-		
-		if (list == null) {
-			return new ArrayList<Appointment>();
-		}
-		
-		return list;
 	}
 	
 	/**

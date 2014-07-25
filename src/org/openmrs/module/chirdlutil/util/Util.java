@@ -6,16 +6,20 @@ package org.openmrs.module.chirdlutil.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.security.DigestException;
 import java.security.MessageDigest;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,10 @@ import org.icepdf.core.exceptions.PDFSecurityException;
 import org.icepdf.core.pobjects.Document;
 import org.icepdf.core.pobjects.Page;
 import org.icepdf.core.util.GraphicsRenderingHints;
+import org.jibx.runtime.BindingDirectory;
+import org.jibx.runtime.IBindingFactory;
+import org.jibx.runtime.IUnmarshallingContext;
+import org.jibx.runtime.JiBXException;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
@@ -39,6 +47,11 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
+
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.bean.CsvToBean;
+import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -70,6 +83,13 @@ public class Util
 	public static final String MONTH_ABBR = "mo";
 	public static final String WEEK_ABBR = "wk";
 	public static final String DAY_ABBR = "do";
+	
+	private static final String APPOINTMENT_FILE_NAME = "Appointments";
+	private static final String APPOINTMENT_FILE_EXTENSION = ".csv";
+	
+	private static ServerConfig serverConfig = null;
+	private static long lastUpdatedServerConfig = System.currentTimeMillis();
+	private static final long SERVER_CONFIG_UPDATE_CYCLE = 1800000; // half hour
 	
 	/**
 	 * Converts specific measurements in English units to metric
@@ -315,6 +335,7 @@ public class Util
 	 * @param unit unit to calculate age in (days, weeks, months, years)
 	 * @return int age in the given units
 	 */
+	//Note: this does not handle leap years for age in days
 	public static int getAgeInUnits(Date birthdate, Date today, String unit)
 	{
 		if (birthdate == null)
@@ -696,5 +717,100 @@ public class Util
 		document.dispose();
 		
 		return image;
+	}
+	
+	/**
+	 * Returns the server configuration.
+	 * 
+	 * @return ServerConfig object.
+	 * @throws JiBXException
+	 * @throws FileNotFoundException
+	 */
+	public static ServerConfig getServerConfig() throws JiBXException, FileNotFoundException {
+		long currentTime = System.currentTimeMillis();
+    	if (serverConfig == null || (currentTime - lastUpdatedServerConfig) > SERVER_CONFIG_UPDATE_CYCLE) {
+    		lastUpdatedServerConfig = currentTime;
+			String configFileStr = Context.getAdministrationService().getGlobalProperty("chirdlutil.serverConfigFile");
+			if (configFileStr == null) {
+				log.error("You must set a value for global property: chirdlutil.serverConfigFile");
+				return null;
+			}
+			
+			File configFile = new File(configFileStr);
+			if (!configFile.exists()) {
+				log.error("The file location specified for the global property "
+					+ "chirdlutil.serverConfigFile does not exist.");
+				return null;
+			}
+			
+			IBindingFactory bfact = BindingDirectory.getFactory(ServerConfig.class);
+			IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+			serverConfig = (ServerConfig)uctx.unmarshalDocument(new FileInputStream(configFile), null);
+    	}
+    	
+    	return serverConfig;
+	}
+	
+	/**
+	 * Get the list of appointments for the next business day.
+	 * 
+	 * @return List of Appointment objects
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static List<Appointment> getAppointments() throws FileNotFoundException, IOException {
+		String csvFileLocStr = Context.getAdministrationService().getGlobalProperty("chirdlutil.appointmentCsvFileLocation");
+		if (csvFileLocStr == null || csvFileLocStr.trim().length() == 0) {
+			log.error("No global property value set for chirdlutil.appointmentCsvFileLocation.  Appointments " +
+					"cannot be located.");
+			return new ArrayList<Appointment>();
+		}
+		
+		File csvLocFile = new File(csvFileLocStr);
+		if (!csvLocFile.exists() || !csvLocFile.canRead()) {
+			log.error("Cannot find/read appointments file from location " + csvFileLocStr);
+			return new ArrayList<Appointment>();
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		// Add a day to the date for tomorrow's appointments.
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		Date date = cal.getTime();
+		DateFormat formatter = new SimpleDateFormat("MMddyyyy");
+		String dateStr = formatter.format(date);
+		String filename = APPOINTMENT_FILE_NAME + " " + dateStr + APPOINTMENT_FILE_EXTENSION;
+		File csvFile = new File(csvLocFile, filename);
+		if (!csvFile.exists() || !csvFile.canRead()) {
+			log.error("Cannot find/read appointments file: " + csvFileLocStr + File.separator + filename);
+			return new ArrayList<Appointment>();
+		}
+		
+		InputStreamReader inStreamReader = new InputStreamReader(new FileInputStream(csvFile), "UTF-8");
+		CSVReader reader = new CSVReader(inStreamReader, '|');
+		HeaderColumnNameTranslateMappingStrategy<Appointment> strat = 
+			new HeaderColumnNameTranslateMappingStrategy<Appointment>();
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("encounterID", "encounterId");
+		map.put("First Name", "firstName");
+		map.put("Last Name", "lastName");
+		map.put("Phone Number", "phoneNumber");
+		map.put("Appt. Date", "apptDate");
+		map.put("Appt. Time", "apptTime");
+		map.put("Clinic Location", "clinicLocation");
+		map.put("MRN", "mrn");
+		map.put("Status", "status");
+		
+		strat.setType(Appointment.class);
+		strat.setColumnMapping(map);
+		
+		CsvToBean<Appointment> csv = new CsvToBean<Appointment>();
+		List<Appointment> list = csv.parse(strat, reader);
+		
+		if (list == null) {
+			return new ArrayList<Appointment>();
+		}
+		
+		return list;
 	}
 }

@@ -6,7 +6,7 @@
 	<!-- chirdlutil Module Properties -->
 	<id>chirdlutil</id>
 	<name>chirdlutil</name>
-	<version>1.5.4</version>
+	<version>1.6.3</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Tammy Dugan</author>
 	<description>
@@ -127,6 +127,11 @@
     <globalProperty>
         <property>chirdlutil.appointmentCsvFileLocation</property>
         <description>Directory containnig the CSV file of upcoming appointments.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.serverConfigFile</property>
+        <description>Location of the server configuration file.
         </description>
     </globalProperty>
 	

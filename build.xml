@@ -74,7 +74,7 @@
 		
 	</target>
 	
-	<target name="package-module" depends="compile-module" description="Packages module into jar file">
+	<target name="package-module" depends="compile-module, bind" description="Packages module into jar file">
 		<mkdir dir="dist" />
 		
 		<!-- Copy module metadata -->
@@ -139,6 +139,14 @@
 	            <fileset dir="build" includes="org/openmrs/module/${module.id}/tools/**/*"/>
 	        </jar>
 	 </target>
+	<target name="bind"> 
+	         <taskdef name="bind" classname="org.jibx.binding.ant.CompileTask">
+	            <classpath refid="classpath" /> 
+	          </taskdef>
+	         <bind binding="${basedir}/binding.xml">
+	          <classpath refid="classpath" /> 
+	          </bind>
+	</target>
 	
 </project>
 

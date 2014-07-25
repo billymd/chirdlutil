@@ -40,8 +40,8 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.impl.LogicContextImpl;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
+import org.openmrs.module.chirdlutil.util.Appointment;
 import org.openmrs.module.chirdlutil.util.Util;
-import org.openmrs.module.chirdlutil.util.voice.Appointment;
 import org.openmrs.module.chirdlutil.util.voice.VoiceCallRequest;
 import org.openmrs.module.chirdlutil.util.voice.VoiceSystemUtil;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.LocationAttributeValue;
@@ -217,7 +217,8 @@ public class AppointmentVoiceCalls extends AbstractTask {
 		
 		List<Appointment> appointments = null;
 		try {
-	        appointments = VoiceSystemUtil.getAppointments();
+	        appointments = Util.getAppointments();
+	        log.info("Total appointments in file: " + appointments.size());
         }
         catch (FileNotFoundException e) {
 	        log.error("Error retrieving appointments", e);
