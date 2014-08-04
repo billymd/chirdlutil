@@ -40,6 +40,7 @@ import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -47,6 +48,8 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient;
+import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -89,7 +92,7 @@ public class Util
 	
 	private static ServerConfig serverConfig = null;
 	private static long lastUpdatedServerConfig = System.currentTimeMillis();
-	private static final long SERVER_CONFIG_UPDATE_CYCLE = 1800000; // half hour
+	private static final long SERVER_CONFIG_UPDATE_CYCLE = 900000; // fifteen minutes
 	
 	/**
 	 * Converts specific measurements in English units to metric
@@ -812,5 +815,53 @@ public class Util
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * Method to return the JSP page associated with a specific form.
+	 * 
+	 * @param formId The form ID.
+	 * @return The page URL for the form or null if one can't be found.
+	 */
+	public static String getFormUrl(Integer formId) {
+		String url = null;
+		try {
+	        ServerConfig config = Util.getServerConfig();
+	        String username = Context.getAuthenticatedUser().getUsername();
+	        MobileClient client = config.getMobileClient(username);
+	        if (client == null) {
+	        	return null;
+	        }
+	        
+	        Form form = Context.getFormService().getForm(formId);
+    		String formName = form.getName();
+	        String primaryFormId = client.getPrimaryFormId();
+	        MobileForm primaryForm = config.getMobileFormById(primaryFormId);
+	        if (primaryForm != null && formName.equals(primaryForm.getName())) {
+        		return primaryForm.getPageUrl();
+	        }
+	        
+	        String[] secondaryFormIds = client.getSecondaryFormIds();
+	        if (secondaryFormIds == null) {
+	        	return null;
+	        }
+	        
+	        for (String secondaryFormId : secondaryFormIds) {
+	        	MobileForm secondaryForm = config.getMobileFormById(secondaryFormId);
+	        	if (secondaryForm != null && formName.equals(secondaryForm.getName())) {
+	        		return secondaryForm.getPageUrl();
+	        	}
+	        }
+	        
+	        return null;
+        }
+        catch (FileNotFoundException e) {
+	        log.error("Error finding server config file", e);
+        }
+        catch (JiBXException e) {
+	        log.error("Error parsing server config file", e);
+        }
+        
+        return url;
 	}
 }

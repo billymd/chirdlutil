@@ -20,6 +20,7 @@ package org.openmrs.module.chirdlutil.xmlBeans.serverconfig;
  */
 public class MobileForm {
 
+	private String id;
 	private String name;
 	private String startState;
 	private String endState;
@@ -79,5 +80,47 @@ public class MobileForm {
      */
     public void setPageUrl(String pageUrl) {
     	this.pageUrl = pageUrl;
+    }
+
+	/**
+     * @return the id
+     */
+    public String getId() {
+	    return id;
+    }
+
+	/**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+	    this.id = id;
+    }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+    	StringBuffer buffer = new StringBuffer("MobileForm:\n");
+    	buffer.append("\tid: " + id + "\n");
+    	buffer.append("\tname: " + name + "\n");
+    	buffer.append("\tstartState: " + startState + "\n");
+    	buffer.append("\tendState: " + endState + "\n");
+    	buffer.append("\tpageUrl: " + pageUrl + "\n");
+    	
+    	return buffer.toString();
+    }
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + (id == null ? 0 : id.hashCode());
+        hash = hash * 31 + (name == null ? 0 : name.hashCode());
+        hash = hash * 45 + (startState == null ? 0 : startState.hashCode());
+        hash = hash * 59 + (endState == null ? 0 : endState.hashCode());
+        hash = hash * 73 + (pageUrl == null ? 0 : pageUrl.hashCode());
+        
+        return hash;
     }
 }

@@ -14,41 +14,42 @@
 package org.openmrs.module.chirdlutil.xmlBeans.serverconfig;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  *
  * @author Steve McKee
  */
-public class MobileClients {
-
-	private ArrayList<MobileClient> mobileClients;
-
-    /**
-     * @return the mobileClients
-     */
-    public ArrayList<MobileClient> getMobileClients() {
-    	return mobileClients;
-    }
+public class FormConfig {
 	
-    /**
-     * @param mobileClients the mobileClients to set
+	private ArrayList<MobileForm> forms;
+
+	/**
+     * @return the forms
      */
-    public void setMobileClients(ArrayList<MobileClient> mobileClients) {
-    	this.mobileClients = mobileClients;
+    public ArrayList<MobileForm> getForms() {
+	    return forms;
+    }
+
+	/**
+     * @param forms the forms to set
+     */
+    public void setForms(ArrayList<MobileForm> forms) {
+	    this.forms = forms;
     }
     
     /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
-    	StringBuffer buffer = new StringBuffer("MobileClients:\n");
-    	if (mobileClients != null && mobileClients.size() > 0) {
-    		for (MobileClient client : mobileClients) {
-    			buffer.append(client.toString());
+    	StringBuffer buffer = new StringBuffer("FormConfig:\n");
+    	if (forms != null && forms.size() > 0) {
+    		for (MobileForm form : forms) {
+    			buffer.append(form.toString());
     		}
     	} else {
-    		buffer.append("\tNo mobile clients exist.");
+    		buffer.append("\tNo forms exist.");
     	}
     	
     	return buffer.toString();
@@ -59,9 +60,9 @@ public class MobileClients {
      */
     public int hashCode() {
         int hash = 1;
-        if (mobileClients != null) {
-	        for (MobileClient client : mobileClients) {
-	        	hash = hash * 13 + (client == null ? 0 : client.hashCode());
+        if (forms != null) {
+	        for (MobileForm form : forms) {
+	        	hash = hash * 13 + (form == null ? 0 : form.hashCode());
 	        }
         }
         

@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.chirdlutil.xmlBeans.serverconfig;
 
-import java.util.ArrayList;
-
 
 /**
  *
@@ -23,7 +21,8 @@ import java.util.ArrayList;
 public class MobileClient {
 
 	private String user;
-	private MobileForms mobileForms;
+	private String primaryFormId;
+	private String[] secondaryFormIds;
 	
     /**
      * @return the user
@@ -40,16 +39,63 @@ public class MobileClient {
     }
 	
     /**
-     * @return the mobileForms
+     * @return the secondaryFormIds
      */
-    public MobileForms getMobileForms() {
-    	return mobileForms;
+    public String[] getSecondaryFormIds() {
+    	return secondaryFormIds;
     }
 
     /**
-     * @param mobileForms the mobileForms to set
+     * @return the primaryFormId
      */
-    public void setMobileForms(MobileForms mobileForms) {
-    	this.mobileForms = mobileForms;
+    public String getPrimaryFormId() {
+    	return primaryFormId;
+    }
+
+    /**
+     * @param primaryForm the primaryForm to set
+     */
+    public void setPrimaryFormId(String primaryFormId) {
+    	this.primaryFormId = primaryFormId;
+    }
+
+	/**
+     * @param secondaryFormIds the mobileForms to set
+     */
+    public void setSecondaryFormIds(String[] secondaryFormIds) {
+    	this.secondaryFormIds = secondaryFormIds;
+    }
+    
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+    	StringBuffer buffer = new StringBuffer("MobileClient:\n");
+    	buffer.append("\tuser: " + user + "\n");
+    	buffer.append("\tprimaryFormId: " + primaryFormId + "\n");
+    	if (secondaryFormIds != null && secondaryFormIds.length > 0) {
+    		buffer.append("\tsecondaryFormIds:\n");
+    		for (String id : secondaryFormIds) {
+    			buffer.append("\t\t" + id + "\n");
+    		}
+    	}
+    	
+    	return buffer.toString();
+    }
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + (user == null ? 0 : user.hashCode());
+        hash = hash * 31 + (primaryFormId == null ? 0 : primaryFormId.hashCode());
+        if (secondaryFormIds != null) {
+	        for (String id : secondaryFormIds) {
+	        	hash = hash * 13 + (id == null ? 0 : id.hashCode());
+	        }
+        }
+        
+        return hash;
     }
 }
