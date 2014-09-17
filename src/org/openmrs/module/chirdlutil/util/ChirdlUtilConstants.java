@@ -32,6 +32,55 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Identifier type constants
+	 */
+	public static final String IDENTIFIER_TYPE_MRN = "MRN_OTHER";
+	public static final String IDENTIFIER_TYPE_SSN = "SSN";
+	public static final String IDENTIFIER_TYPE_IMMUNIZATION_REGISTRY = "Immunization Registry";
+
+	/*
+	 * 
+	 */
+
+	/*
+	 * Person attribute type constants
+	 */
+	public static final String PERSON_ATTRIBUTE_RELIGION = "Religion";
+	public static final String PERSON_ATTRIBUTE_MARITAL_STATUS = "Civil Status";
+	public static final String PERSON_ATTRIBUTE_MAIDEN_NAME = "Mother's maiden name";
+	public static final String PERSON_ATTRIBUTE_NEXT_OF_KIN = "Next of Kin";
+	public static final String PERSON_ATTRIBUTE_TELEPHONE = "Telephone Number";
+	public static final String PERSON_ATTRIBUTE_CITIZENSHIP = "Citizenship";
+	public static final String PERSON_ATTRIBUTE_RACE = "Race";
+	public static final String PERSON_ATTRIBUTE_SSN = "SSN";
+
+	/*
+	 * 
+	 */
+
+	/*
+	 * Chirdlutilbackports error category constants
+	 */
+	public static final String ERROR_QUERY_KITE_CONNECTION = "Query Kite Connection";
+	public static final String ERROR_GENERAL = "General Error";
+	public static final String ERROR_PSF_SCAN = "PSF Scan";
+	public static final String ERROR_PWS_SCAN = "PWS Scan";
+	public static final String ERROR_HL7_PARSING = "Hl7 Parsing";
+	public static final String ERROR_MRN_VALIDITY = "MRN Validity";
+	public static final String ERROR_XML_PARSING = "XML Parsing";
+	public static final String ERROR_ID_VALIDITY = "ID Validity";
+	public static final String ERROR_QUERY_MED_LIST_CONNECTION = "Query Medication List Connection";
+	public static final String ERROR_HL7_EXPORT = "Hl7 Export";
+	public static final String ERROR_SUPPORT_PAGE = "Support Page";
+	public static final String ERROR_BAD_SCANS = "Bad Scans";
+	public static final String ERROR_QUERY_IMMUNIZATION_CONNECTION = "Query Immunization List Connection";
+	public static final String ERROR_GIS_CLINIC_ADDRESS_USED = "GIS Clinic Address Used";
+	public static final String ERROR_MEDICAL_LEGAL_PAGE = "Medical Legal Page";
+	public static final String ERROR_DIABETES_PAGE = "Diabetes Page";
+	public static final String ERROR_WEB_SERVICE = "Web Service Error";
+
+	
+	/*
 	 * Location tag attribute constants
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
