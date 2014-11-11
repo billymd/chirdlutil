@@ -25,7 +25,6 @@ public final class ChirdlUtilConstants {
 	 * User property constants
 	 */
 	public static final String USER_PROPERTY_LOCATION = "location";
-	
 	public static final String USER_PROPERTY_LOCATION_TAGS = "locationTags";
 	/*
 	 * 
@@ -84,6 +83,148 @@ public final class ChirdlUtilConstants {
 	 * Location tag attribute constants
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * States
+	 */
+	public static final String STATE_ERROR_STATE = "ErrorState";
+	public static final String STATE_JIT_CREATE = "JIT_create";
+	public static final String STATE_JIT_MOBILE_CREATE = "JIT_mobile_create";
+	public static final String STATE_CHECKIN = "CHECKIN";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Rules
+	 */
+	public static final String RULE_CREATE_JIT = "CREATE_JIT";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Instance Attributes
+	 */
+	public static final String FORM_INST_ATTR_TRIGGER = "trigger";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Instance Attribute Values
+	 */
+	public static final String FORM_INST_ATTR_VAL_FORCE_PRINT = "forcePrint";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Attributes
+	 */
+	public static final String FORM_ATTR_DEFAULT_MERGE_DIRECTORY = "defaultMergeDirectory";
+	public static final String FORM_ATTR_OUTPUT_TYPE = "outputType";
+	public static final String FORM_ATTR_MOBILE_ONLY = "mobileOnly";
+	public static final String FORM_ATTR_DISPLAY_NAME = "displayName";
+	public static final String FORM_ATTR_FORCE_PRINTABLE = "forcePrintable";
+	public static final String FORM_ATTR_AGE_MIN = "ageMin";
+	public static final String FORM_ATTR_AGE_MAX = "ageMax";
+	public static final String FORM_ATTR_AGE_MIN_UNITS = "ageMinUnits";
+	public static final String FORM_ATTR_AGE_MAX_UNITS = "ageMaxUnits";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Attributes Values
+	 */
+	public static final String FORM_ATTR_VAL_TELEFORM_XML = "teleformXML";
+	public static final String FORM_ATTR_VAL_PDF = "pdf";
+	public static final String FORM_ATTR_VAL_TRUE = "true";
+	public static final String FORM_ATTR_VAL_FALSE = "false";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * File Information
+	 */
+	public static final String FILE_PENDING = "Pending";
+	public static final String FILE_PDF = "pdf";
+	public static final String FILE_EXTENSION_XML = ".xml";
+	public static final String FILE_EXTENSION_PDF = ".pdf";
+	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Global Properties
+	 */
+	public static final String GLOBAL_PROP_DEFAULT_OUTPUT_TYPE = "atd.defaultOutputType";
+	public static final String GLOBAL_PROP_PDF_TEMPLATE_DIRECTORY = "atd.pdfTemplateDirectory";
+	public static final String GLOBAL_RPOP_PASSCODE = "chica.passcode";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * General Information
+	 */
+	public static final String GENERAL_INFO_COMMA = ",";
+	public static final String GENERAL_INFO_UNDERSCORE = "_";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Parameters
+	 */
+	public static final String PARAMETER_0 = "param0";
+	public static final String PARAMETER_1 = "param1";
+	public static final String PARAMETER_2 = "param2";
+	public static final String PARAMETER_SESSION_ID = "sessionId";
+	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
+	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
+	public static final String PARAMETER_FORM_NAME = "formName";
+	public static final String PARAMETER_TRIGGER = "trigger";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * HTTP Information
+	 */
+	public static final String HTTP_HEADER_AUTHENTICATE = "WWW-Authenticate";
+	public static final String HTTP_HEADER_AUTHENTICATE_BASIC_CHICA = "BASIC realm=\"chica\"";
+	public static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
+	public static final String HTTP_HEADER_CACHE_CONTROL_NO_CACHE = "no-cache";
+	public static final String HTTP_AUTHORIZATION_HEADER = "Authorization";
+	public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
+	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+	public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
+	
+	/*
+	 * 
+	 */
+	
+	/*
+	 * HTML Information
+	 */
+	public static final String HTML_SPAN_START = "<span>";
+	public static final String HTML_SPAN_END = "</span>";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * XML Information
+	 */
+	public static final String XML_START_TAG = "<";
+	public static final String XML_END_TAG = ">";
 	/*
 	 * 
 	 */
