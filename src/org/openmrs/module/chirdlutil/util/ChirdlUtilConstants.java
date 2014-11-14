@@ -134,6 +134,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_AGE_MAX = "ageMax";
 	public static final String FORM_ATTR_AGE_MIN_UNITS = "ageMinUnits";
 	public static final String FORM_ATTR_AGE_MAX_UNITS = "ageMaxUnits";
+	public static final String FORM_ATTR_REQUIRES_PDF_IMAGE_MERGE = "requriesPDFImageMerge";
 	/*
 	 * 
 	 */
