@@ -87,4 +87,19 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+	
+	/* Unit constants
+	 * 
+	 */
+	public static final String MEASUREMENT_LB = "lb";
+	public static final String MEASUREMENT_IN = "in";
+	public static final String MEASUREMENT_CM = "cm";
+	public static final String MEASUREMENT_KG = "kg";
+	
+	public static final String YEAR_ABBR = "yo";
+	public static final String MONTH_ABBR = "mo";
+	public static final String WEEK_ABBR = "wk";
+	public static final String DAY_ABBR = "do";
+	
 }
+
