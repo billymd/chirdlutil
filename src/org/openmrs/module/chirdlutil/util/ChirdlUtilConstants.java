@@ -151,6 +151,14 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Location Attribute Values
+	 */
+	public static final String LOCATION_ATTR_PAGER_MESSAGE = "pagerMessage";
+	/*
+	 * 
+	 */
+	
+	/*
 	 * File Information
 	 */
 	public static final String FILE_PENDING = "Pending";
@@ -167,7 +175,12 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GLOBAL_PROP_DEFAULT_OUTPUT_TYPE = "atd.defaultOutputType";
 	public static final String GLOBAL_PROP_PDF_TEMPLATE_DIRECTORY = "atd.pdfTemplateDirectory";
-	public static final String GLOBAL_RPOP_PASSCODE = "chica.passcode";
+	public static final String GLOBAL_PROP_PASSCODE = "chica.passcode";
+	public static final String GLOBAL_PROP_PAGER_NUMBER = "chica.pagerNumber";
+	public static final String GLOBAL_PROP_PAGER_NUMBER_URL_PARAM = "chica.pagerUrlNumberParam";
+	public static final String GLOBAL_PROP_PAGER_NUMBER_MESSAGE_PARAM = "chica.pagerUrlMessageParam";
+	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
+	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
 	/*
 	 * 
 	 */
@@ -207,6 +220,8 @@ public final class ChirdlUtilConstants {
 	public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
 	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
 	public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
+	public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
+	public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
 	
 	/*
 	 * 
