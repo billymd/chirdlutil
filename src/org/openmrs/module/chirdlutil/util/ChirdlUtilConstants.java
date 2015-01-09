@@ -84,6 +84,7 @@ public final class ChirdlUtilConstants {
 	 * Location tag attribute constants
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
+	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
 	/*
 	 * 
 	 */
