@@ -135,6 +135,9 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_AGE_MIN_UNITS = "ageMinUnits";
 	public static final String FORM_ATTR_AGE_MAX_UNITS = "ageMaxUnits";
 	public static final String FORM_ATTR_REQUIRES_PDF_IMAGE_MERGE = "requriesPDFImageMerge";
+	public static final String FORM_ATTR_DEFAULT_PRINTER = "defaultPrinter";
+	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
+	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
 	/*
 	 * 
 	 */
@@ -200,11 +203,13 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_0 = "param0";
 	public static final String PARAMETER_1 = "param1";
 	public static final String PARAMETER_2 = "param2";
+	public static final String PARAMETER_3 = "param3";
 	public static final String PARAMETER_SESSION_ID = "sessionId";
 	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
 	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
 	public static final String PARAMETER_FORM_NAME = "formName";
 	public static final String PARAMETER_TRIGGER = "trigger";
+	public static final String PARAMETER_AUTO_PRINT = "autoPrint";
 	/*
 	 * 
 	 */
