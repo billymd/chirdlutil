@@ -146,6 +146,7 @@ public final class ChirdlUtilConstants {
 	 * Form Attributes Values
 	 */
 	public static final String FORM_ATTR_VAL_TELEFORM_XML = "teleformXML";
+	public static final String FORM_ATTR_VAL_TELEFORM_PDF = "teleformPdf";
 	public static final String FORM_ATTR_VAL_PDF = "pdf";
 	public static final String FORM_ATTR_VAL_TRUE = "true";
 	public static final String FORM_ATTR_VAL_FALSE = "false";
