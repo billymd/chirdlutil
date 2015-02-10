@@ -102,5 +102,12 @@ public final class ChirdlUtilConstants {
 	public static final String WEEK_ABBR = "wk";
 	public static final String DAY_ABBR = "do";
 	
+	
+	/*
+	 * Global property constants
+	 */
+	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
+	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
+
 }
 
