@@ -83,6 +83,7 @@ public final class ChirdlUtilConstants {
 	 * Location tag attribute constants
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
+	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
 	/*
 	 * 
 	 */
@@ -250,4 +251,25 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+
+	/* Unit constants
+	 * 
+	 */
+	public static final String MEASUREMENT_LB = "lb";
+	public static final String MEASUREMENT_IN = "in";
+	public static final String MEASUREMENT_CM = "cm";
+	public static final String MEASUREMENT_KG = "kg";
+	
+	public static final String YEAR_ABBR = "yo";
+	public static final String MONTH_ABBR = "mo";
+	public static final String WEEK_ABBR = "wk";
+	public static final String DAY_ABBR = "do";
+	
+	
+	/*
+	 * Global property constants
+	 */
+	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
+	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
 }
+
