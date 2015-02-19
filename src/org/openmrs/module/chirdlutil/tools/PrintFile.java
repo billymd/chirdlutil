@@ -47,10 +47,10 @@ public class PrintFile {
 	 */
     public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException {
     	if (printerName == null || printerName.trim().length() == 0) {
-    		System.err.println("A valid printerName parameter was not provided: " + printerName);
+    		System.out.println("A valid printerName parameter was not provided: " + printerName);
     		return false;
     	} else if (fileToPrint == null || !fileToPrint.exists() || !fileToPrint.canRead()) {
-    		System.err.println("A valid fileToPrint parameter was not provided: " + fileToPrint);
+    		System.out.println("A valid fileToPrint parameter was not provided: " + fileToPrint);
     		return false;
     	}
     	
@@ -58,7 +58,7 @@ public class PrintFile {
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
         if (printServices == null || printServices.length == 0) {
-        	System.err.println("No printers found for " + printerName);
+        	System.out.println("No printers found for " + printerName);
         	return false;
         }
         
