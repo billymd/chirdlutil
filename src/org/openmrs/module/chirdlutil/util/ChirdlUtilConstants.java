@@ -127,6 +127,7 @@ public final class ChirdlUtilConstants {
 	 * Form Attributes
 	 */
 	public static final String FORM_ATTR_DEFAULT_MERGE_DIRECTORY = "defaultMergeDirectory";
+	public static final String FORM_ATTR_DEFAULT_EXPORT_DIRECTORY = "defaultExportDirectory";
 	public static final String FORM_ATTR_OUTPUT_TYPE = "outputType";
 	public static final String FORM_ATTR_MOBILE_ONLY = "mobileOnly";
 	public static final String FORM_ATTR_DISPLAY_NAME = "displayName";
@@ -169,7 +170,12 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_PENDING = "Pending";
 	public static final String FILE_PDF = "pdf";
 	public static final String FILE_EXTENSION_XML = ".xml";
+	public static final String FILE_EXTENSION_XMLE = ".xmle";
 	public static final String FILE_EXTENSION_PDF = ".pdf";
+	public static final String FILE_EXTENSION_19 = ".19";
+	public static final String FILE_EXTENSION_20 = ".20";
+	public static final String FILE_EXTENSION_22 = ".22";
+	public static final String FILE_EXTENSION_23 = ".23";
 	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
 	/*
 	 * 
@@ -282,6 +288,22 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String CONCEPT_DATATYPE_TEXT = "Text";
 	public static final String CONCEPT_CLASS_CHICA = "CHICA";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Data sources
+	 */
+	public static final String DATA_SOURCE_FORM = "form";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form information
+	 */
+	public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
 	/*
 	 * 
 	 */
