@@ -120,6 +120,16 @@ public final class ChirdlUtilConstants {
 	/*
 	 * Parameter value constants
 	 */
+	public static final String PARAMETER_0 = "param0";
+	public static final String PARAMETER_1 = "param1";
+	public static final String PARAMETER_2 = "param2";
+	public static final String PARAMETER_3 = "param3";
+	public static final String PARAMETER_SESSION_ID = "sessionId";
+	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
+	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
+	public static final String PARAMETER_FORM_NAME = "formName";
+	public static final String PARAMETER_TRIGGER = "trigger";
+	public static final String PARAMETER_AUTO_PRINT = "autoPrint";
 	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
 	/*
