@@ -109,5 +109,21 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
 	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
 
+	/*
+	 * Parameter constants
+	 */
+	public static final String PARAMETER_MODE = "mode";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Parameter value constants
+	 */
+	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
+	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
+	/*
+	 * 
+	 */
 }
 
