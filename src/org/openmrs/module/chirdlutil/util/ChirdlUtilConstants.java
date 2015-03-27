@@ -108,6 +108,54 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
 	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
+	
+	
+	/*
+	 * State constants
+	 */
+	
+	public static final String STATE_EXPORT_JIT = "ExportJIT";
+	public static final String STATE_EXPORT_VITALS = "Export Vitals";
+	public static final String STATE_EXPORT_POC = "exportPOC";
+	public static final String STATE_JIT = "JIT";
+	public static final String STATE_CHECKIN = "CHECKIN";
+	public static final String STATE_FINISHED = "FINISHED";
+	public static final String STATE_ERROR = "ErrorState";
+	public static final String STATE_PSF_PRINTED = "PSF_printed";
+	public static final String STATE_PSF_WAIT_TO_SCAN = "PSF_wait_to_scan";
+	public static final String STATE_PWS_PRINTED = "PWS_printed";
+	public static final String STATE_PWS_WAIT_TO_SCAN = "PWS_wait_to_scan";
+	public static final String STATE_PWS_PROCESS = "PWS_process";
+	public static final String STATE_RANDOMIZE = "Randomize";
+	public static final String STATE_PSF_PROCESS = "PSF_process";
+	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
+	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
+	public static final String STATE_PSF_REPRINT = "PSF_reprint";
+	public static final String STATE_PWS_REPRINT = "PWS_reprint";
+	public static final String STATE_PSF_RESCAN = "PSF_rescan";
+	public static final String STATE_PWS_RESCAN = "PWS_rescan";
+	public static final String STATE_PSF_CREATE = "PSF_create";
+	public static final String STATE_PWS_CREATE = "PWS_create";
+	public static final String STATE_QUERY_KITE = "QUERY KITE Alias";
+	public static final String STATE_CLINIC_REGISTRATION = "Clinic Registration";
+	public static final String STATE_PROCESS_CHECKIN_HL7 = "Process Checkin HL7";
+	public static final String STATE_QUERY_MEDICATION_LIST = "Query medication list";
+	public static final String STATE_JIT_CREATE = "JIT_create";
+	public static final String STATE_JIT_PRINTED = "JIT_printed";
+	public static final String STATE_JIT_WAIT_TO_SCAN = "JIT_wait_to_scan";
+	public static final String STATE_JIT_PROCESS = "JIT_process";
+	public static final String STATE_JIT_RESCAN = "JIT_rescan";
+	public static final String STATE_JIT_FINISHED = "JIT_FINISHED";
+	public static final String STATE_JIT_REPRINT = "JIT_reprint";
+	public static final String STATE_JIT_INCOMPLETE = "JIT_incomplete";
+	public static final String STATE_CLEAR_IN_MEMORY_OBS_PWS = "CLEAR INMEMORY OBS PWS";
+	public static final String STATE_CLEAR_IN_MEMORY_OBS_PSF = "CLEAR INMEMORY OBS PSF";
+	public static final String STATE_JIT_FAX = "JIT_fax";
+	public static final String STATE_QUERY_IMMUNIZATION_FORECAST = "Query Immunization Forecast";
+	public static final String STATE_PSF_MOBILE_CREATE = "PSF_mobile_create";
+	public static final String STATE_JIT_MOBILE_CREATE = "JIT_mobile_create";
+	public static final String STATE_PSF_WAIT_FOR_ELECTORONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
+	public static final String STATE_JIT_WAIT_FOR_ELECTRONIC_SUBMISSION = "JIT WAIT FOR ELECTRONIC SUBMISSION";
 
 }
 
