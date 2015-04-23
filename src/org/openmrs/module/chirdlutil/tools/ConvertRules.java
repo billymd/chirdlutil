@@ -82,7 +82,13 @@ public class ConvertRules {
 	 */
 	private static void processFile(File file, File outputDirectory) {
 		String oldFileName = file.getPath();
+		
+		if(!oldFileName.endsWith("mlm")){
+			return;
+		}
 		String newFileName = outputDirectory + "\\" + file.getName();
+		
+		System.out.println("Converting "+oldFileName+"...");
 		//rewrite the priority line with the new priority
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(oldFileName));
@@ -124,6 +130,17 @@ public class ConvertRules {
 				if (matches) {
 					
 					line = m.replaceFirst("$1$3:=$5");
+					line = line+"\n"+"endif;";
+				}
+				
+				p = Pattern.compile("\\s+[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+");
+				m = p.matcher(line);
+				matches = m.find();
+				
+				//convert vertical pipes to proper assignment
+				if (matches) {
+					
+					line = line+"\n"+"endif;";
 				}
 				
 				if (line.toLowerCase().indexOf("age_min:") > -1) {
@@ -145,7 +162,7 @@ public class ConvertRules {
 				
 				if (inLogicSection) {
 					//look for calls in the logic section
-					p = Pattern.compile("(.*)([cC][aA][lL][lL])(.+)");
+					p = Pattern.compile("(.*)([cC][aA][lL][lL].+)");
 					m = p.matcher(line);
 					matches = m.matches();
 					
@@ -157,7 +174,7 @@ public class ConvertRules {
 					//make sure calls have an assignment in the logic section
 					if (matches&&!matches2) {
 						
-						line = m.replaceFirst("temp:=call$3");
+						line = m.replaceFirst("temp:=$2");
 					}
 				}
 				
