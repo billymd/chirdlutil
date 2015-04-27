@@ -83,31 +83,34 @@ public class ConvertRules {
 	private static void processFile(File file, File outputDirectory) {
 		String oldFileName = file.getPath();
 		
-		if(!oldFileName.endsWith("mlm")){
+		if (!oldFileName.endsWith("mlm")) {
 			return;
 		}
 		String newFileName = outputDirectory + "\\" + file.getName();
 		
-		System.out.println("Converting "+oldFileName+"...");
+		System.out.println("Converting " + oldFileName + "...");
 		//rewrite the priority line with the new priority
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(oldFileName));
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
 			String line = null;
 			Boolean inLogicSection = false;
+			//Boolean removeEndIf = false;
 			
 			while ((line = reader.readLine()) != null) {
 				
-				if(line.length()==0){
+				if (line.trim().length() == 0) {
 					writer.write(line + "\n");
 					writer.flush();
 					continue;
 				}
 				
+				//add value for validation
 				if (line.toLowerCase().indexOf("validation:") > -1) {
 					line = "Validation: testing;;";
 				}
 				
+				//remove everything but actual date from date field
 				if (line.toLowerCase().indexOf("date:") > -1) {
 					int index = line.indexOf("T");
 					if (index > 0) {
@@ -115,11 +118,12 @@ public class ConvertRules {
 					}
 				}
 				
+				//make sure endif has a semicolon
 				if (line.toLowerCase().indexOf("endif") > -1) {
-					int index = line.indexOf(";");
-					if (index == -1) {
-						line = line + ";";
-					}
+						int index = line.indexOf(";");
+						if (index == -1) {
+							line = line + ";";
+						}
 				}
 				
 				Pattern p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
@@ -130,26 +134,42 @@ public class ConvertRules {
 				if (matches) {
 					
 					line = m.replaceFirst("$1$3:=$5");
-					line = line+"\n"+"endif;";
+					line = line + "\n" + "endif;";
 				}
 				
 				p = Pattern.compile("\\s+[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+");
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//convert vertical pipes to proper assignment
+				//add endif after conclude
 				if (matches) {
 					
-					line = line+"\n"+"endif;";
+					p = Pattern.compile(".*[Ee][Ll][Ss][Ee]\\s+([Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+.*)");
+					m = p.matcher(line);
+					matches = m.matches();
+					
+					//convert Else conclude <boolean>; endif; --> conclude <boolean>;
+					if (matches) {
+						
+						line = m.replaceFirst("$1");
+						//removeEndIf = true;
+					} else {
+						
+						line = line + "\n" + "endif;";
+					}
 				}
 				
+				//remove age_min
 				if (line.toLowerCase().indexOf("age_min:") > -1) {
 					line = "";
 				}
+				
+				//remove age max
 				if (line.toLowerCase().indexOf("age_max:") > -1) {
 					line = "";
 				}
 				
+				//replace "is in" with "in"
 				line = line.replaceAll("is in", "in");
 				
 				if (line.toLowerCase().indexOf("logic:") > -1) {
@@ -172,7 +192,7 @@ public class ConvertRules {
 					boolean matches2 = m2.matches();
 					
 					//make sure calls have an assignment in the logic section
-					if (matches&&!matches2) {
+					if (matches && !matches2) {
 						
 						line = m.replaceFirst("temp:=$2");
 					}
@@ -182,10 +202,20 @@ public class ConvertRules {
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//convert vertical pipes to proper assignment
+				//make sure reserved word no has quotes around it
 				if (matches) {
 					
 					line = m.replaceAll("$1\"$2\"");
+				}
+				
+				p = Pattern.compile("\\{\\s*VisitType\\s*\\}");
+				m = p.matcher(line);
+				matches = m.find();
+				
+				//make sure VisitType has a datasource
+				if (matches) {
+					
+					line = m.replaceAll("{VisitType from CHICA}");
 				}
 				
 				writer.write(line + "\n");
