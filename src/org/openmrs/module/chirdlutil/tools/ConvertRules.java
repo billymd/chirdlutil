@@ -95,12 +95,13 @@ public class ConvertRules {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
 			String line = null;
 			Boolean inLogicSection = false;
-			//Boolean removeEndIf = false;
+			String result = "";
+			String extraVariables = "";
 			
 			while ((line = reader.readLine()) != null) {
 				
 				if (line.trim().length() == 0) {
-					writer.write(line + "\n");
+					writer.write(line);
 					writer.flush();
 					continue;
 				}
@@ -159,13 +160,15 @@ public class ConvertRules {
 					}
 				}
 				
-				//remove age_min
+				//remove age_min and move to Data section
 				if (line.toLowerCase().indexOf("age_min:") > -1) {
+					extraVariables+=line.replaceFirst(":", ":=").replace(";;", ";")+"\n";
 					line = "";
 				}
 				
-				//remove age max
+				//remove age max and move to Data section
 				if (line.toLowerCase().indexOf("age_max:") > -1) {
+					extraVariables+=line.replaceFirst(":", ":=").replace(";;", ";")+"\n";
 					line = "";
 				}
 				
@@ -208,6 +211,13 @@ public class ConvertRules {
 					line = m.replaceAll("$1\"$2\"");
 				}
 				
+				//fix missing semicolon after Explanation
+				if(line.indexOf("Explanation:")>-1){
+					line = line.replaceAll(";", "");
+					line = line+";;";
+				}
+				
+				
 				p = Pattern.compile("\\{\\s*VisitType\\s*\\}");
 				m = p.matcher(line);
 				matches = m.find();
@@ -218,11 +228,32 @@ public class ConvertRules {
 					line = m.replaceAll("{VisitType from CHICA}");
 				}
 				
-				writer.write(line + "\n");
-				writer.flush();
-				
+				result+=line + "\n";
 			}
 			
+			//add rule type to Data section
+			if(result.indexOf("PSF")>-1){
+				extraVariables+="Rule_Type:= PSF;\n";
+			}
+			
+			if(result.indexOf("PWS")>-1){
+				extraVariables+="Rule_Type:= PWS;\n";
+			}
+			
+			//Add firstname to Data section
+			if(result.indexOf("firstname")>-1){
+				extraVariables+="firstname:= call firstName;\n";
+			}
+			
+			//Add Gender to Data section
+			if(result.indexOf("Gender")>-1||result.indexOf("hisher")>-1){
+				extraVariables+="Gender:= read Last {gender from person};\n";
+			}
+			int index = result.indexOf("Data:");
+			result = result.substring(0,index+5)+"\n"+extraVariables+"\n"+result.substring(index+5,result.length());
+			
+			writer.write(result);
+			writer.flush();
 			writer.close();
 			reader.close();
 		}
