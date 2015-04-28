@@ -50,7 +50,7 @@ public class ConvertRules {
 				}
 			}
 			
-			File outputDirectory = new File(args[args.length - 1]);
+			String outputDirectory = args[args.length - 1];
 			updateMLMs(parentDirectories, outputDirectory);
 		}
 		catch (Exception e) {
@@ -59,12 +59,12 @@ public class ConvertRules {
 	}
 	
 	//Look for each mlm file listed in the csv file and update its priority
-	public static void updateMLMs(File[] files, File outputDirectory) throws FileNotFoundException, IOException {
+	public static void updateMLMs(File[] files, String outputDirectory) throws FileNotFoundException, IOException {
 		
 		//look for the mlm file
 		for (File file : files) {
 			
-			if (!file.getAbsolutePath().equals(outputDirectory.getAbsolutePath())) {
+			if (!file.getAbsolutePath().equals(outputDirectory)) {
 				if (file.isDirectory()) {
 					updateMLMs(file.listFiles(), outputDirectory);
 				} else {
@@ -80,16 +80,21 @@ public class ConvertRules {
 	 * 
 	 * @param file
 	 */
-	private static void processFile(File file, File outputDirectory) {
+	private static void processFile(File file, String outputPath) {
 		String oldFileName = file.getPath();
 		
 		if (!oldFileName.endsWith("mlm")) {
 			return;
 		}
+		String directory = file.getParentFile().getName();
+		
+		File outputDirectory = new File(outputPath + "/" + directory);
+		
+		outputDirectory.mkdirs();
+		
 		String newFileName = outputDirectory + "\\" + file.getName();
 		
 		System.out.println("Converting " + oldFileName + "...");
-		//rewrite the priority line with the new priority
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(oldFileName));
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
@@ -121,10 +126,10 @@ public class ConvertRules {
 				
 				//make sure endif has a semicolon
 				if (line.toLowerCase().indexOf("endif") > -1) {
-						int index = line.indexOf(";");
-						if (index == -1) {
-							line = line + ";";
-						}
+					int index = line.indexOf(";");
+					if (index == -1) {
+						line = line + ";";
+					}
 				}
 				
 				Pattern p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
@@ -153,7 +158,6 @@ public class ConvertRules {
 					if (matches) {
 						
 						line = m.replaceFirst("$1");
-						//removeEndIf = true;
 					} else {
 						
 						line = line + "\n" + "endif;";
@@ -162,13 +166,13 @@ public class ConvertRules {
 				
 				//remove age_min and move to Data section
 				if (line.toLowerCase().indexOf("age_min:") > -1) {
-					extraVariables+=line.replaceFirst(":", ":=").replace(";;", ";")+"\n";
+					extraVariables += line.replaceFirst(":", ":=").replace(";;", ";") + "\n";
 					line = "";
 				}
 				
 				//remove age max and move to Data section
 				if (line.toLowerCase().indexOf("age_max:") > -1) {
-					extraVariables+=line.replaceFirst(":", ":=").replace(";;", ";")+"\n";
+					extraVariables += line.replaceFirst(":", ":=").replace(";;", ";") + "\n";
 					line = "";
 				}
 				
@@ -185,16 +189,16 @@ public class ConvertRules {
 				
 				if (inLogicSection) {
 					//look for calls in the logic section
-					p = Pattern.compile("(.*)([cC][aA][lL][lL].+)");
+					p = Pattern.compile("(.*)([cC][aA][lL][lL]\\s+.+)");
 					m = p.matcher(line);
 					matches = m.matches();
 					
-					//look for calls that already have a variable
-					Pattern p2 = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll].+");
+					//look for calls that already have a variable assignment
+					Pattern p2 = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
 					Matcher m2 = p2.matcher(line);
 					boolean matches2 = m2.matches();
 					
-					//make sure calls have an assignment in the logic section
+					//make sure calls have an assignment variable in the logic section
 					if (matches && !matches2) {
 						
 						line = m.replaceFirst("temp:=$2");
@@ -205,52 +209,75 @@ public class ConvertRules {
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//make sure reserved word no has quotes around it
+				//make sure reserved word "no" has quotes around it
 				if (matches) {
 					
 					line = m.replaceAll("$1\"$2\"");
 				}
 				
 				//fix missing semicolon after Explanation
-				if(line.indexOf("Explanation:")>-1){
+				if (line.indexOf("Explanation:") > -1) {
 					line = line.replaceAll(";", "");
-					line = line+";;";
+					line = line + ";;";
 				}
 				
-				
-				p = Pattern.compile("\\{\\s*VisitType\\s*\\}");
+				p = Pattern.compile("\\{(.*)\\}");
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//make sure VisitType has a datasource
+				//make sure datasource has from
 				if (matches) {
 					
-					line = m.replaceAll("{VisitType from CHICA}");
+					if(!m.group(1).toLowerCase().contains("from")){
+						line = m.replaceFirst("{$1 from CHICA}");
+					}
 				}
 				
-				result+=line + "\n";
+				p = Pattern.compile("Priority:\\s*(\\w*)\\s*");
+				m = p.matcher(line);
+				matches = m.find();
+				
+				//remove blank priorities
+				if (matches) {
+					if (m.group(1).trim().length() == 0) {
+						line = "";
+					}
+				}
+				
+				p = Pattern.compile("\\s*If.*'.*then");
+				m = p.matcher(line);
+				matches = m.find();
+				
+				//replace single quotes with double quotes in If statements
+				if (matches) {
+					line = line.replaceAll("'", "\"");
+				}
+				
+				result += line + "\n";
 			}
 			
 			//add rule type to Data section
-			if(result.indexOf("PSF")>-1){
-				extraVariables+="Rule_Type:= PSF;\n";
+			if (result.indexOf("PSF") > -1) {
+				extraVariables += "Rule_Type:= PSF;\n";
+			} else {
+				
+				if (result.indexOf("PWS") > -1) {
+					extraVariables += "Rule_Type:= PWS;\n";
+				}
 			}
 			
-			if(result.indexOf("PWS")>-1){
-				extraVariables+="Rule_Type:= PWS;\n";
+			//Add firstname to Data section, if needed
+			if (result.indexOf("firstname") > -1) {
+				extraVariables += "firstname:= call firstName;\n";
 			}
 			
-			//Add firstname to Data section
-			if(result.indexOf("firstname")>-1){
-				extraVariables+="firstname:= call firstName;\n";
-			}
-			
-			//Add Gender to Data section
-			if(result.indexOf("Gender")>-1||result.indexOf("hisher")>-1){
-				extraVariables+="Gender:= read Last {gender from person};\n";
+			//Add Gender to Data section, if needed
+			if (result.indexOf("Gender") > -1 || result.indexOf("hisher") > -1) {
+				extraVariables += "Gender:= read Last {gender from person};\n";
 			}
 			int index = result.indexOf("Data:");
-			result = result.substring(0,index+5)+"\n"+extraVariables+"\n"+result.substring(index+5,result.length());
+			result = result.substring(0, index + 5) + "\n" + extraVariables + "\n"
+			        + result.substring(index + 5, result.length());
 			
 			writer.write(result);
 			writer.flush();
