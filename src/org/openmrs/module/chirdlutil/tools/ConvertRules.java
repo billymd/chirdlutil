@@ -95,6 +95,9 @@ public class ConvertRules {
 		String newFileName = outputDirectory + "\\" + file.getName();
 		
 		System.out.println("Converting " + oldFileName + "...");
+		Pattern p = null;
+		Matcher m = null;
+		boolean matches = false;
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(oldFileName));
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
@@ -132,9 +135,9 @@ public class ConvertRules {
 					}
 				}
 				
-				Pattern p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
-				Matcher m = p.matcher(line);
-				boolean matches = m.matches();
+				p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
+				m = p.matcher(line);
+				matches = m.matches();
 				
 				//convert vertical pipes to proper assignment
 				if (matches) {
@@ -278,6 +281,15 @@ public class ConvertRules {
 			int index = result.indexOf("Data:");
 			result = result.substring(0, index + 5) + "\n" + extraVariables + "\n"
 			        + result.substring(index + 5, result.length());
+			
+			//remove empty If then statements
+			p = Pattern.compile("If[^\\n\\r]+?then\\s+?endif",Pattern.DOTALL);
+			m = p.matcher(result);
+			while(m.find()){
+					result = m.replaceFirst("");
+					m = p.matcher(result);
+			}
+			
 			
 			writer.write(result);
 			writer.flush();
