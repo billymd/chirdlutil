@@ -192,14 +192,14 @@ public class ConvertRules {
 				
 				if (inLogicSection) {
 					//look for calls in the logic section
-					p = Pattern.compile("(.*)([cC][aA][lL][lL]\\s+.+)");
+					p = Pattern.compile("(.*)([cC][aA][lL][lL]\\s+)");
 					m = p.matcher(line);
-					matches = m.matches();
+					matches = m.find();
 					
 					//look for calls that already have a variable assignment
 					Pattern p2 = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
 					Matcher m2 = p2.matcher(line);
-					boolean matches2 = m2.matches();
+					boolean matches2 = m2.find();
 					
 					//make sure calls have an assignment variable in the logic section
 					if (matches && !matches2) {
@@ -231,7 +231,7 @@ public class ConvertRules {
 				//make sure datasource has from
 				if (matches) {
 					
-					if(!m.group(1).toLowerCase().contains("from")){
+					if (!m.group(1).toLowerCase().contains("from")) {
 						line = m.replaceFirst("{$1 from CHICA}");
 					}
 				}
@@ -278,18 +278,29 @@ public class ConvertRules {
 			if (result.indexOf("Gender") > -1 || result.indexOf("hisher") > -1) {
 				extraVariables += "Gender:= read Last {gender from person};\n";
 			}
+			//Add hisher to Data section, if needed
+			if (result.indexOf("hisher") > -1) {
+				//only add if not already there
+				p = Pattern.compile("hisher\\s*:=");
+				m = p.matcher(result);
+				if (!m.find()) {
+					extraVariables += "If (Gender = M) then hisher := \"his\";\n"+
+							"endif;\n"+
+							"If (Gender = F) then hisher := \"her\";\n"+
+							"endif;\n";
+				}
+			}
 			int index = result.indexOf("Data:");
 			result = result.substring(0, index + 5) + "\n" + extraVariables + "\n"
 			        + result.substring(index + 5, result.length());
 			
 			//remove empty If then statements
-			p = Pattern.compile("If[^\\n\\r]+?then\\s+?endif",Pattern.DOTALL);
+			p = Pattern.compile("If[^\\n\\r]+?then\\s+?endif", Pattern.DOTALL);
 			m = p.matcher(result);
-			while(m.find()){
-					result = m.replaceFirst("");
-					m = p.matcher(result);
+			while (m.find()) {
+				result = m.replaceFirst("");
+				m = p.matcher(result);
 			}
-			
 			
 			writer.write(result);
 			writer.flush();
