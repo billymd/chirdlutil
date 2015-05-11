@@ -168,6 +168,7 @@ public final class ChirdlUtilConstants {
 	 * File Information
 	 */
 	public static final String FILE_PENDING = "Pending";
+	public static final String FILE_ARCHIVE = "Archive";
 	public static final String FILE_PDF = "pdf";
 	public static final String FILE_EXTENSION_XML = ".xml";
 	public static final String FILE_EXTENSION_XMLE = ".xmle";
