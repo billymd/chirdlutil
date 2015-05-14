@@ -193,6 +193,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PAGER_NUMBER_MESSAGE_PARAM = "chica.pagerUrlMessageParam";
 	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
 	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
+	public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
 	/*
 	 * 
 	 */
@@ -305,6 +306,22 @@ public final class ChirdlUtilConstants {
 	 * Form information
 	 */
 	public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Encryption algorithms
+	 */
+	public static final String ENCRYPTION_AES = "AES";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Encoding
+	 */
+	public static final String ENCODING_UTF8 = "UTF-8";
 	/*
 	 * 
 	 */
