@@ -453,7 +453,7 @@ public class XMLUtil
 	/**
 	 * Finds the merge XML based on the parameters provided.
 	 * 
-	 * @param defaultMergeDirectory The directory where the merge files resides.
+	 * @param defaultMergeDirectory The directory where the merge files reside.
 	 * @param locationId The clinic location ID.
 	 * @param formId The ID of the general form.
 	 * @param formInstanceId The ID of the instance of the general form.
@@ -465,7 +465,34 @@ public class XMLUtil
 			return null;
 		}
 		
-		File archiveDirectory = new File(mergeDirectory, "Archive");
+		File pendingDirectory = new File(mergeDirectory, ChirdlUtilConstants.FILE_PENDING);
+		File xmlFile = findMergeXmlFile(mergeDirectory, pendingDirectory, locationId, formId, formInstanceId);
+		
+		if (xmlFile != null && xmlFile.exists()) {
+			return xmlFile;
+		}
+		
+		File archiveDirectory = new File(mergeDirectory, ChirdlUtilConstants.FILE_ARCHIVE);
+		xmlFile = findMergeXmlFile(mergeDirectory, archiveDirectory, locationId, formId, formInstanceId);
+		
+		if (xmlFile != null && xmlFile.exists()) {
+			return xmlFile;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Finds the merge XML based on the parameters provided.
+	 * 
+	 * @param mergeDirectory The directory where the merge files reside.
+	 * @param subDirectory The subDirectory to search for the merge file.
+	 * @param locationId The clinic location ID.
+	 * @param formId The ID of the general form.
+	 * @param formInstanceId The ID of the instance of the general form.
+	 * @return A File referencing the merge XML.  Null will be returned if the XML merge file cannot be found.
+	 */
+	public static File findMergeXmlFile(File mergeDirectory, File subDirectory, Integer locationId, Integer formId, Integer formInstanceId) {
 		int i = 22;
 		String filename = locationId + "_" + formId + "_" + formInstanceId + "." + i;
 		File xmlFile = new File(mergeDirectory, filename);
@@ -474,8 +501,8 @@ public class XMLUtil
 			filename = locationId + "_" + formId + "_" + formInstanceId + "." + i;
 			xmlFile = new File(mergeDirectory, filename);
 			if (!xmlFile.exists()) {
-				if (archiveDirectory.exists()) {
-					xmlFile = new File(archiveDirectory, filename);
+				if (subDirectory.exists()) {
+					xmlFile = new File(subDirectory, filename);
 				}
 			}
 		}
