@@ -2,6 +2,7 @@
   <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig" name="serverConfig">
         <structure field="mobileClients" usage="optional"/>
         <structure field="formConfig" usage="optional"/>
+        <structure field="pdfImageMerge" usage="optional"/>
   </mapping>
   <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClients" name="mobileClients">
         <collection field="mobileClients">
@@ -22,6 +23,22 @@
                 <value name="startState" field="startState" />
                 <value name="endState" field="endState" />
                 <value name="pageUrl" field="pageUrl" />
+            </structure>
+        </collection>
+  </mapping>
+  <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.PDFImageMerge" name="pdfImageMerge">
+        <collection field="imageForms">
+            <structure name="imageForm" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ImageForm">
+                <value style="attribute" name="name" field="name" />
+                <collection field="imageMerges">
+		            <structure name="imageMerge" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ImageMerge">
+		                <value name="fieldName" field="fieldName" />
+		                <value name="pageNumber" field="pageNumber" />
+		                <value name="positionX" field="positionX" />
+		                <value name="positionY" field="positionY" />
+		                <value name="rotation" field="rotation" />
+		            </structure>
+		        </collection>
             </structure>
         </collection>
   </mapping>

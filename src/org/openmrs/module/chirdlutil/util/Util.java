@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -39,6 +40,9 @@ import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
 import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
+import org.openmrs.ConceptDatatype;
+import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -863,5 +867,35 @@ public class Util
         }
         
         return url;
+	}
+	
+	/**
+	 * Creates a new concept.
+	 * 
+	 * @param conceptName The name of the concept.
+	 * @param conceptClass The concept class.
+	 * @param conceptDatatype The concept data type.
+	 * @return Newly created Concept object.
+	 */
+	public static Concept createNewConcept(String conceptName, String conceptClass, String conceptDatatype) {
+		Concept concept = new Concept();
+		concept.setDateCreated(new Date());
+		concept.setUuid(UUID.randomUUID().toString());
+		
+		ConceptName conceptNameObj = new ConceptName();
+		conceptNameObj.setLocale(Context.getLocale());
+		conceptNameObj.setName(conceptName);
+		conceptNameObj.setDateCreated(new Date());
+		conceptNameObj.setUuid(UUID.randomUUID().toString());
+		concept.addName(conceptNameObj);
+		
+		ConceptService conceptService = Context.getConceptService();
+		ConceptClass conceptClassObj = conceptService.getConceptClassByName(conceptClass);
+		concept.setConceptClass(conceptClassObj);
+		
+		ConceptDatatype conceptDatatypeObj = conceptService.getConceptDatatypeByName(conceptDatatype);
+		concept.setDatatype(conceptDatatypeObj);
+		
+		return conceptService.saveConcept(concept);
 	}
 }

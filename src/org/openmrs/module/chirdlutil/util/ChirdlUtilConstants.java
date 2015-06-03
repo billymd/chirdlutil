@@ -89,6 +89,178 @@ public final class ChirdlUtilConstants {
 	 * 
 	 */
 	
+	/*
+	 * States
+	 */
+	public static final String STATE_ERROR_STATE = "ErrorState";
+	public static final String STATE_JIT_CREATE = "JIT_create";
+	public static final String STATE_JIT_MOBILE_CREATE = "JIT_mobile_create";
+	public static final String STATE_CHECKIN = "CHECKIN";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Rules
+	 */
+	public static final String RULE_CREATE_JIT = "CREATE_JIT";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Instance Attributes
+	 */
+	public static final String FORM_INST_ATTR_TRIGGER = "trigger";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Instance Attribute Values
+	 */
+	public static final String FORM_INST_ATTR_VAL_FORCE_PRINT = "forcePrint";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Attributes
+	 */
+	public static final String FORM_ATTR_DEFAULT_MERGE_DIRECTORY = "defaultMergeDirectory";
+	public static final String FORM_ATTR_DEFAULT_EXPORT_DIRECTORY = "defaultExportDirectory";
+	public static final String FORM_ATTR_OUTPUT_TYPE = "outputType";
+	public static final String FORM_ATTR_MOBILE_ONLY = "mobileOnly";
+	public static final String FORM_ATTR_DISPLAY_NAME = "displayName";
+	public static final String FORM_ATTR_FORCE_PRINTABLE = "forcePrintable";
+	public static final String FORM_ATTR_AGE_MIN = "ageMin";
+	public static final String FORM_ATTR_AGE_MAX = "ageMax";
+	public static final String FORM_ATTR_AGE_MIN_UNITS = "ageMinUnits";
+	public static final String FORM_ATTR_AGE_MAX_UNITS = "ageMaxUnits";
+	public static final String FORM_ATTR_REQUIRES_PDF_IMAGE_MERGE = "requriesPDFImageMerge";
+	public static final String FORM_ATTR_DEFAULT_PRINTER = "defaultPrinter";
+	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
+	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form Attributes Values
+	 */
+	public static final String FORM_ATTR_VAL_TELEFORM_XML = "teleformXML";
+	public static final String FORM_ATTR_VAL_TELEFORM_PDF = "teleformPdf";
+	public static final String FORM_ATTR_VAL_PDF = "pdf";
+	public static final String FORM_ATTR_VAL_TRUE = "true";
+	public static final String FORM_ATTR_VAL_FALSE = "false";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Location Attribute Values
+	 */
+	public static final String LOCATION_ATTR_PAGER_MESSAGE = "pagerMessage";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * File Information
+	 */
+	public static final String FILE_PENDING = "Pending";
+	public static final String FILE_ARCHIVE = "Archive";
+	public static final String FILE_PDF = "pdf";
+	public static final String FILE_EXTENSION_XML = ".xml";
+	public static final String FILE_EXTENSION_XMLE = ".xmle";
+	public static final String FILE_EXTENSION_PDF = ".pdf";
+	public static final String FILE_EXTENSION_19 = ".19";
+	public static final String FILE_EXTENSION_20 = ".20";
+	public static final String FILE_EXTENSION_22 = ".22";
+	public static final String FILE_EXTENSION_23 = ".23";
+	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Global Properties
+	 */
+	public static final String GLOBAL_PROP_DEFAULT_OUTPUT_TYPE = "atd.defaultOutputType";
+	public static final String GLOBAL_PROP_PDF_TEMPLATE_DIRECTORY = "atd.pdfTemplateDirectory";
+	public static final String GLOBAL_PROP_PASSCODE = "chica.passcode";
+	public static final String GLOBAL_PROP_PAGER_NUMBER = "chica.pagerNumber";
+	public static final String GLOBAL_PROP_PAGER_NUMBER_URL_PARAM = "chica.pagerUrlNumberParam";
+	public static final String GLOBAL_PROP_PAGER_NUMBER_MESSAGE_PARAM = "chica.pagerUrlMessageParam";
+	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
+	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
+	public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * General Information
+	 */
+	public static final String GENERAL_INFO_COMMA = ",";
+	public static final String GENERAL_INFO_UNDERSCORE = "_";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Parameters
+	 */
+	public static final String PARAMETER_0 = "param0";
+	public static final String PARAMETER_1 = "param1";
+	public static final String PARAMETER_2 = "param2";
+	public static final String PARAMETER_3 = "param3";
+	public static final String PARAMETER_SESSION_ID = "sessionId";
+	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
+	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
+	public static final String PARAMETER_FORM_NAME = "formName";
+	public static final String PARAMETER_TRIGGER = "trigger";
+	public static final String PARAMETER_AUTO_PRINT = "autoPrint";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * HTTP Information
+	 */
+	public static final String HTTP_HEADER_AUTHENTICATE = "WWW-Authenticate";
+	public static final String HTTP_HEADER_AUTHENTICATE_BASIC_CHICA = "BASIC realm=\"chica\"";
+	public static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
+	public static final String HTTP_HEADER_CACHE_CONTROL_NO_CACHE = "no-cache";
+	public static final String HTTP_AUTHORIZATION_HEADER = "Authorization";
+	public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
+	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+	public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
+	public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
+	public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
+	
+	/*
+	 * 
+	 */
+	
+	/*
+	 * HTML Information
+	 */
+	public static final String HTML_SPAN_START = "<span>";
+	public static final String HTML_SPAN_END = "</span>";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * XML Information
+	 */
+	public static final String XML_START_TAG = "<";
+	public static final String XML_END_TAG = ">";
+	/*
+	 * 
+	 */
+
 	/* Unit constants
 	 * 
 	 */
@@ -118,7 +290,6 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
 	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_JIT = "JIT";
-	public static final String STATE_CHECKIN = "CHECKIN";
 	public static final String STATE_FINISHED = "FINISHED";
 	public static final String STATE_ERROR = "ErrorState";
 	public static final String STATE_PSF_PRINTED = "PSF_printed";
@@ -140,7 +311,6 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_CLINIC_REGISTRATION = "Clinic Registration";
 	public static final String STATE_PROCESS_CHECKIN_HL7 = "Process Checkin HL7";
 	public static final String STATE_QUERY_MEDICATION_LIST = "Query medication list";
-	public static final String STATE_JIT_CREATE = "JIT_create";
 	public static final String STATE_JIT_PRINTED = "JIT_printed";
 	public static final String STATE_JIT_WAIT_TO_SCAN = "JIT_wait_to_scan";
 	public static final String STATE_JIT_PROCESS = "JIT_process";
@@ -153,9 +323,39 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_JIT_FAX = "JIT_fax";
 	public static final String STATE_QUERY_IMMUNIZATION_FORECAST = "Query Immunization Forecast";
 	public static final String STATE_PSF_MOBILE_CREATE = "PSF_mobile_create";
-	public static final String STATE_JIT_MOBILE_CREATE = "JIT_mobile_create";
 	public static final String STATE_PSF_WAIT_FOR_ELECTORONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_JIT_WAIT_FOR_ELECTRONIC_SUBMISSION = "JIT WAIT FOR ELECTRONIC SUBMISSION";
 
+	/*
+	 * Data sources
+	 */
+	public static final String DATA_SOURCE_FORM = "form";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Form information
+	 */
+	public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Encryption algorithms
+	 */
+	public static final String ENCRYPTION_AES = "AES";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Encoding
+	 */
+	public static final String ENCODING_UTF8 = "UTF-8";
+	/*
+	 * 
+	 */
 }
 

@@ -28,6 +28,7 @@ public class ServerConfig {
 
 	private MobileClients mobileClients;
 	private FormConfig formConfig;
+	private PDFImageMerge pdfImageMerge;
 	private Map<String, List<MobileForm>> userAllFormsMap = new ConcurrentHashMap<String, List<MobileForm>>();
 	private Map<String, MobileForm> userPrimaryFormMap = new ConcurrentHashMap<String, MobileForm>();
 	private Map<String, List<MobileForm>> userSecondaryFormsMap = new ConcurrentHashMap<String, List<MobileForm>>();
@@ -64,6 +65,20 @@ public class ServerConfig {
     }
     
     /**
+     * @return the pdfImageMerge
+     */
+    public PDFImageMerge getPdfImageMerge() {
+    	return pdfImageMerge;
+    }
+	
+    /**
+     * @param pdfImageMerge the pdfImageMerge to set
+     */
+    public void setPdfImageMerge(PDFImageMerge pdfImageMerge) {
+    	this.pdfImageMerge = pdfImageMerge;
+    }
+
+	/**
      * @param user The user the forms are associated with.
 	 * @return all forms for this mobile client
 	 */
@@ -229,6 +244,29 @@ public class ServerConfig {
 		
 		return null;
 	}
+	
+	/**
+	 * @param formName The name of the PDF image form.
+	 * @return ImageForm object conting the image information for the specified PDF form.
+	 */
+	public ImageForm getPDFImageForm(String formName) {
+		if (pdfImageMerge == null) {
+			return null;
+		}
+		
+		List<ImageForm> forms = pdfImageMerge.getImageForms();
+		if (forms == null) {
+			return null;
+		}
+		
+		for (ImageForm form : forms) {
+			if (form.getName().equals(formName)) {
+				return form;
+			}
+		}
+		
+		return null;
+	}
     
     /**
      * @see java.lang.Object#toString()
@@ -243,6 +281,10 @@ public class ServerConfig {
     		buffer.append(formConfig.toString());
     	} 
     	
+    	if (pdfImageMerge != null) {
+    		buffer.append(pdfImageMerge.toString());
+    	}
+    	
     	return buffer.toString();
     }
     
@@ -253,8 +295,8 @@ public class ServerConfig {
         int hash = 1;
         hash = hash * 13 + (mobileClients == null ? 0 : mobileClients.hashCode());
         hash = hash * 31 + (formConfig == null ? 0 : formConfig.hashCode());
+        hash = hash * 13 + (pdfImageMerge == null ? 0 : pdfImageMerge.hashCode());
         
         return hash;
     }
-
 }
