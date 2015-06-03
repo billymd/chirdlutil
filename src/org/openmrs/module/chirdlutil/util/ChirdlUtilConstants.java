@@ -114,9 +114,9 @@ public final class ChirdlUtilConstants {
 	 * State constants
 	 */
 	
-	public static final String STATE_EXPORT_JIT = "ExportJIT";
+	public static final String STATE_EXPORT_JIT = "JIT_export";
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
-	public static final String STATE_EXPORT_POC = "exportPOC";
+	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_JIT = "JIT";
 	public static final String STATE_CHECKIN = "CHECKIN";
 	public static final String STATE_FINISHED = "FINISHED";
