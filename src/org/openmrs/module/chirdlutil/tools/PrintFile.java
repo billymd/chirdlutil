@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.chirdlutil.tools;
 
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,6 +30,8 @@ import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.PrinterName;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+
 
 /**
  * Utility used to print a file to a specific printer.
@@ -36,6 +40,8 @@ import javax.print.attribute.standard.PrinterName;
  */
 public class PrintFile {
 	
+	private static final String PDF_EXTENSION = ".pdf";
+
 	/**
 	 * Prints the specified file to the specified printer.  This method does perform any rendering for specialized file formats.  
 	 * Please test this method with your file type and printer.
@@ -45,7 +51,7 @@ public class PrintFile {
 	 * @throws IOException
 	 * @throws PrintException
 	 */
-    public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException {
+    public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException, PrinterException {
     	if (printerName == null || printerName.trim().length() == 0) {
     		System.out.println("A valid printerName parameter was not provided: " + printerName);
     		return false;
@@ -54,9 +60,13 @@ public class PrintFile {
     		return false;
     	}
     	
+    	if (fileToPrint.getAbsolutePath().toLowerCase().endsWith(PDF_EXTENSION)) {
+    		return printPDFFile(printerName, fileToPrint);
+    	}
+    	
     	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
         if (printServices == null || printServices.length == 0) {
         	System.out.println("No printers found for " + printerName);
         	return false;
@@ -71,6 +81,40 @@ public class PrintFile {
         Doc document = new SimpleDoc(psStream, flavor, null);
         printJob.print(document, null);
         return true;
+    }
+    
+    /**
+     * Prints a specified PDF file to a specified printer.
+     * 
+     * @param printerName The name of the printer to use to print the PDF file.
+     * @param pdfFile The PDF File to print.
+     * @throws IOException
+     * @throws PrinterException
+     */
+    public boolean printPDFFile(String printerName, File pdfFile) throws IOException, PrinterException {
+    	if (printerName == null || printerName.trim().length() == 0) {
+    		System.out.println("A valid printerName parameter was not provided: " + printerName);
+    		return false;
+    	} else if (pdfFile == null || !pdfFile.exists() || !pdfFile.canRead()) {
+    		System.out.println("A valid fileToPrint parameter was not provided (or unable to read): " + pdfFile);
+    		return false;
+    	}
+    	
+    	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
+        printServiceAttributeSet.add(new PrinterName(printerName, null)); 
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
+        if (printServices == null || printServices.length == 0) {
+        	System.out.println("No printers found for " + printerName);
+        	return false;
+        }
+        
+        PrintService selectedService = printServices[0];
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+	    printJob.setPrintService(selectedService);
+	    PDDocument document = PDDocument.load(pdfFile);
+	    document.silentPrint(printJob);
+	    
+	    return true;
     }
 	
 	/**
@@ -111,6 +155,10 @@ public class PrintFile {
 	        System.exit(1);
         }
         catch (PrintException e) {
+	        e.printStackTrace();
+	        System.exit(1);
+        }
+		catch (PrinterException e) {
 	        e.printStackTrace();
 	        System.exit(1);
         }
