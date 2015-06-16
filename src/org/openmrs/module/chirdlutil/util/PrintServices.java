@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.chirdlutil.util;
 
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +30,6 @@ import javax.print.attribute.standard.PrinterName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * Utility class for printing needs.
@@ -84,10 +81,8 @@ public class PrintServices {
      * 
      * @param printerName The name of the printer to use to print the PDF file.
      * @param pdfFile The PDF File to print.
-     * @throws IOException
-     * @throws PrinterException
      */
-    public static void printPDFFile(String printerName, File pdfFile) throws IOException, PrinterException {
+    public static void printPDFFile(String printerName, File pdfFile) {
     	if (printerName == null || printerName.trim().length() == 0) {
     		log.error("A valid printerName parameter was not provided: " + printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
@@ -96,18 +91,8 @@ public class PrintServices {
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + pdfFile);
     	}
     	
-    	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
-        printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
-        if (printServices == null || printServices.length == 0) {
-        	log.error("No printers found for " + printerName);
-        	throw new IllegalArgumentException("No printers found for " + printerName);
-        }
-        
-        PrintService selectedService = printServices[0];
-        PrinterJob printJob = PrinterJob.getPrinterJob();
-	    printJob.setPrintService(selectedService);
-	    PDDocument document = PDDocument.load(pdfFile);
-	    document.silentPrint(printJob);
+    	Runnable printRunnable = new PDFPrintRunnable(printerName, pdfFile);
+    	Thread printThread = new Thread(printRunnable);
+    	printThread.start();
     }
 }
