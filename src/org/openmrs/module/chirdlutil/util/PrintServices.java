@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.chirdlutil.util;
 
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,20 +28,11 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.PrintServiceAttributeSet;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.PrintQuality;
 import javax.print.attribute.standard.PrinterName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.icepdf.core.exceptions.PDFException;
-import org.icepdf.core.exceptions.PDFSecurityException;
-import org.icepdf.core.pobjects.Document;
-import org.icepdf.core.util.Defs;
-import org.icepdf.core.views.DocumentViewController;
-import org.icepdf.ri.common.PrintHelper;
-import org.icepdf.ri.common.SwingController;
-import org.icepdf.ri.common.views.DocumentViewControllerImpl;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * Utility class for printing needs.
@@ -50,21 +43,6 @@ public class PrintServices {
 
 	private static Log log = LogFactory.getLog(PrintServices.class);
 	
-	static {
-        Defs.setProperty("java.awt.headless", "true");
-        Defs.setProperty("org.icepdf.core.scaleImages", "false");
-        Defs.setProperty("org.icepdf.core.print.disableAlpha", "true");
-        Defs.setProperty("org.icepdf.core.print.alphaInterpolation", "VALUE_ALPHA_INTERPOLATION_SPEED");
-        Defs.setProperty("org.icepdf.core.print.antiAliasing", "VALUE_ANTIALIAS_ON");
-        Defs.setProperty("org.icepdf.core.print.textAntiAliasing", "VALUE_TEXT_ANTIALIAS_OFF");
-        Defs.setProperty("org.icepdf.core.print.colorRender", "VALUE_COLOR_RENDER_SPEED");
-        Defs.setProperty("org.icepdf.core.print.dither", "VALUE_DITHER_DEFAULT");
-        Defs.setProperty("org.icepdf.core.print.fractionalmetrics", "VALUE_FRACTIONALMETRICS_OFF");
-        Defs.setProperty("org.icepdf.core.print.interpolation", "VALUE_INTERPOLATION_NEAREST_NEIGHBOR");
-        Defs.setProperty("org.icepdf.core.print.render", "VALUE_RENDER_SPEED");
-        Defs.setProperty("org.icepdf.core.print.stroke", "VALUE_STROKE_PURE");
-    }
-    
 	/**
 	 * Prints the specified file to the specified printer.  This method does perform any rendering for specialized file formats.  
 	 * Please test this method with your file type and printer.
@@ -102,16 +80,26 @@ public class PrintServices {
     }
     
     /**
-     * Prints a specified PDF file to a specified printer.
+     * Prints a specified PDF file to a specified printer.  This method uses a thread to execute the print job.
+     * 
+     * @param printerName The name of the printer to use to print the PDF file.
+     * @param pdfFile The PDF File to print.
+     */
+    public static void printPDFFileAsynchronous(String printerName, File pdfFile) {
+    	Runnable printRunnable = new PDFPrintRunnable(printerName, pdfFile);
+    	Thread printThread = new Thread(printRunnable);
+    	printThread.start();
+    }
+    
+    /**
+     * Prints a specified PDF file to a specified printer.  This is a synchronous print job.
      * 
      * @param printerName The name of the printer to use to print the PDF file.
      * @param pdfFile The PDF File to print.
      * @throws IOException
-     * @throws PDFSecurityException
-     * @throws PDFException
-     * @throws PrintException
+     * @throws PrinterException
      */
-    public static void printPDFFile(String printerName, File pdfFile) throws IOException, PrintException {
+    public static void printPDFFileSynchronous(String printerName, File pdfFile) throws IOException, PrinterException {
     	if (printerName == null || printerName.trim().length() == 0) {
     		log.error("A valid printerName parameter was not provided: " + printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
@@ -122,37 +110,16 @@ public class PrintServices {
     	
     	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
         if (printServices == null || printServices.length == 0) {
         	log.error("No printers found for " + printerName);
-        	throw new IllegalArgumentException("No printers found for " + printerName);
+        	return;
         }
         
         PrintService selectedService = printServices[0];
-    	Document pdf = new Document();
-    	try {
-	        pdf.setFile(pdfFile.getAbsolutePath());
-        }
-        catch (PDFException e) {
-	        log.error("Error printing PDF", e);
-	        throw new PrintException(e);
-        }
-        catch (PDFSecurityException e) {
-	        log.error("Error printing PDF", e);
-	        throw new PrintException(e);
-        }
-    	
-    	SwingController sc = new SwingController();
-    	DocumentViewController vc = new DocumentViewControllerImpl(sc);
-    	vc.setDocument(pdf);
-    	
-    	// create a new print helper with a specified paper size and print
-    	// quality
-    	PrintHelper printHelper = new PrintHelper(vc, pdf.getPageTree(),
-    	        MediaSizeName.NA_LETTER, PrintQuality.NORMAL);
-    	// try and print pages 1 - 10, 1 copy, scale to fit paper.
-    	printHelper.setupPrintService(selectedService, 0, pdf.getNumberOfPages() - 1, 1, false);
-    	// print the document
-    	printHelper.print();
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+	    printJob.setPrintService(selectedService);
+	    PDDocument document = PDDocument.load(pdfFile);
+	    document.silentPrint(printJob);
     }
 }
