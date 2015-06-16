@@ -31,6 +31,7 @@ import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.PrinterName;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
 
 
 /**
@@ -40,8 +41,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  */
 public class PrintFile {
 	
-	private static final String PDF_EXTENSION = ".pdf";
-
 	/**
 	 * Prints the specified file to the specified printer.  This method does perform any rendering for specialized file formats.  
 	 * Please test this method with your file type and printer.
@@ -60,7 +59,7 @@ public class PrintFile {
     		return false;
     	}
     	
-    	if (fileToPrint.getAbsolutePath().toLowerCase().endsWith(PDF_EXTENSION)) {
+    	if (fileToPrint.getAbsolutePath().toLowerCase().endsWith(ChirdlUtilConstants.FILE_EXTENSION_PDF)) {
     		return printPDFFile(printerName, fileToPrint);
     	}
     	
