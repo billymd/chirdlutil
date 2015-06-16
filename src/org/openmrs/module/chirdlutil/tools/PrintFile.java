@@ -13,20 +13,14 @@
  */
 package org.openmrs.module.chirdlutil.tools;
 
+import java.awt.print.PrinterException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
 import javax.print.PrintException;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintServiceAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
-import javax.print.attribute.standard.PrinterName;
+
+import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
+import org.openmrs.module.chirdlutil.util.PrintServices;
 
 
 /**
@@ -44,33 +38,16 @@ public class PrintFile {
 	 * @param fileToPrint The file to print.
 	 * @throws IOException
 	 * @throws PrintException
+	 * @throws PrinterException
 	 */
-    public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException {
-    	if (printerName == null || printerName.trim().length() == 0) {
-    		System.out.println("A valid printerName parameter was not provided: " + printerName);
-    		return false;
-    	} else if (fileToPrint == null || !fileToPrint.exists() || !fileToPrint.canRead()) {
-    		System.out.println("A valid fileToPrint parameter was not provided: " + fileToPrint);
-    		return false;
+    public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException, PrinterException {
+    	if (fileToPrint.getAbsolutePath().toLowerCase().endsWith(ChirdlUtilConstants.FILE_EXTENSION_PDF)) {
+    		PrintServices.printPDFFileSynchronous(printerName, fileToPrint);
+    	} else {
+    		PrintServices.printFile(printerName, fileToPrint);
     	}
     	
-    	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
-        printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
-        if (printServices == null || printServices.length == 0) {
-        	System.out.println("No printers found for " + printerName);
-        	return false;
-        }
-        
-        PrintService selectedService = printServices[0];
-        FileInputStream psStream = null;  
-        psStream = new FileInputStream(fileToPrint);  
-        
-        DocPrintJob printJob = selectedService.createPrintJob();
-        DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
-        Doc document = new SimpleDoc(psStream, flavor, null);
-        printJob.print(document, null);
-        return true;
+    	return true;
     }
 	
 	/**
@@ -111,6 +88,10 @@ public class PrintFile {
 	        System.exit(1);
         }
         catch (PrintException e) {
+	        e.printStackTrace();
+	        System.exit(1);
+        }
+		catch (PrinterException e) {
 	        e.printStackTrace();
 	        System.exit(1);
         }
