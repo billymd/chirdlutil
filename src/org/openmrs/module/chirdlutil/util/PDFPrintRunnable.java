@@ -35,7 +35,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
  * 
  * @author Steve McKee
  */
-public class PDFPrintRunnable extends Thread {
+public class PDFPrintRunnable implements Runnable {
 	
 	private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
 	private String printerName;
@@ -52,7 +52,9 @@ public class PDFPrintRunnable extends Thread {
 		this.pdfFile = pdfFile;
 	}
 
-	@Override
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
     public void run() {
 		PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
