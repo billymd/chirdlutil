@@ -14,20 +14,11 @@
 package org.openmrs.module.chirdlutil.util;
 
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 
-import javax.print.DocFlavor;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.attribute.HashPrintServiceAttributeSet;
-import javax.print.attribute.PrintServiceAttributeSet;
-import javax.print.attribute.standard.PrinterName;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.pdfbox.pdmodel.PDDocument;
 
 
 /**
@@ -56,26 +47,17 @@ public class PDFPrintRunnable implements Runnable {
 	 * @see java.lang.Runnable#run()
 	 */
     public void run() {
-		PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
-        printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
-        if (printServices == null || printServices.length == 0) {
-        	log.error("No printers found for " + printerName);
-        	throw new IllegalArgumentException("No printers found for " + printerName);
-        }
-        
-        PrintService selectedService = printServices[0];
-        PrinterJob printJob = PrinterJob.getPrinterJob();
 	    try {
-            printJob.setPrintService(selectedService);
-            PDDocument document = PDDocument.load(pdfFile);
-		    document.silentPrint(printJob);
+	    	PrintServices.printPDFFileSynchronous(printerName, pdfFile);
         }
         catch (PrinterException e) {
             log.error("Error printing PDF file " + pdfFile.getAbsolutePath() + " to printer " + printerName, e);
         } 
 	    catch (IOException e) {
             log.error("Error loading PDF file to print " + pdfFile.getAbsolutePath(), e);
+        }
+	    catch (IllegalArgumentException e) {
+            log.error("Invalid parameter print PDF file " + pdfFile.getAbsolutePath(), e);
         }
     }
 }
